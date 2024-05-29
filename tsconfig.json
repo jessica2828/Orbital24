@@ -13,5 +13,15 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-  ]
+, "components/Logo.js", "components/Header.js", "components/CustomButton.jsx", "components/BackButton.jsx", "components/Background.js", "src/screens/index.js", "components/Toast.js", "components/TextInput.js", "app/index.jsx", 
+"**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts",
+    "components/**/*.ts",
+    "components/**/*.tsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "app/**/*.ts",
+    "app/**/*.tsx", "app/focus-session.jsx", "app/_layout.jsx"]
 }
