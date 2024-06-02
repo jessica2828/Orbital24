@@ -23,5 +23,5 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     "app/**/*.ts",
-    "app/**/*.tsx", "app/focus-session.jsx", "app/_layout.jsx"]
+    "app/**/*.tsx", "app/(screens)/focus-session.jsx", "app/_layout.jsx"]
 }

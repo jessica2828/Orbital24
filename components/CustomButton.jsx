@@ -6,12 +6,12 @@ const CustomButton = ({ title, handlePress, containerStyles, textStyles, isLoadi
     <TouchableOpacity 
       onPress={handlePress}
       activeOpacity={0.7}
-      className={`bg-white rounded-full min-h-[45px] justify-center items-center 
+      className={`bg-white bg-opacity-50 rounded-full min-h-[45px] justify-center items-center 
       ${containerStyles} ${isLoading ? 'opacity-40' : ''} `}
       disabled={isLoading}
     >
       <Text className={`text-primary font-playfair2 text-lg ${textStyles}`}>{title}</Text>
-      </TouchableOpacity>
+    </TouchableOpacity>
   )
 }
 

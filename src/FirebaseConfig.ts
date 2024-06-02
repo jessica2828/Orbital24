@@ -22,17 +22,14 @@ const firebaseConfig = {
   measurementId: "G-VFSH6139GM"
 };
 
-// Initialize Firebase App
 const app = initializeApp(firebaseConfig);
 
-// Initialize Firebase Auth with AsyncStorage persistence
 export const FIREBASE_AUTH = initializeAuth(app, {
   persistence: getReactNativePersistence(AsyncStorage)
 });
 
 
-// // Initialize Firebase
 export const FIREBASE_APP = app;
 //export const FIREBASE_AUTH = getAuth(FIREBASE_APP);
 export const FIRESTORE_DB = getFirestore(FIREBASE_APP);
-// //const analytics = getAnalytics(app);
+//const analytics = getAnalytics(app);

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, Button, KeyboardAvoidingView, ImageBackground } from 'react-native';
+import { View, Image, Text, StyleSheet, TextInput, Button, KeyboardAvoidingView, ImageBackground } from 'react-native';
 import React, { useState } from 'react';
 import { Link, Redirect, router, useRouter } from 'expo-router';
 import { FIREBASE_AUTH, FIRESTORE_DB } from '@/src/FirebaseConfig';
@@ -6,11 +6,12 @@ import { ActivityIndicator } from 'react-native-paper';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import CustomButton from '@/components/CustomButton';
 import BackButton from '@/components/BackButton';
+import { images } from '../../constants';
 
 export default function SignUp() {
   // ask for user's name
 
-  const [name, setName] = useState('');
+  //const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -24,18 +25,20 @@ export default function SignUp() {
     }
 
     setLoading(true);
+
     try {
       const response = await createUserWithEmailAndPassword(auth, email, password);
       const user = response.user;
 
     // use firestore
-    await FIRESTORE_DB.collection('users').doc(user.uid).set({
-      name: name,
-      email: user.email,
-    });
+    // const nameResponse = await FIRESTORE_DB.collection('users').doc(user.uid).set({
+    //   name: name,
+    //   email: user.email,
+    // });
 
       console.log(response);
-      alert('Check your email!')
+      alert('Sign up successful.');
+      router.replace('/sign-in');
     } catch (error) {
       console.log(error);
       alert('Sign up failed: ' + error.message)
@@ -49,13 +52,20 @@ export default function SignUp() {
       <View style={styles.overlay} />
       <View style={styles.container}>
         <KeyboardAvoidingView behavior='padding'>
+          {/* <Image 
+              source={images.logo} 
+              className="w-[130px] h-[84px]"
+              resizeMode="contain"
+          /> */}
+          <Text className="text-lg text-gray-100 font-playfair2">  Name</Text>
           <TextInput 
-            value={name} 
+            //value={name} 
             style={styles.input}
             placeholder="Name"
             autoCapitalize="none"
-            onChangeText={(text) => setName(text)} 
+            //onChangeText={(text) => setName(text)} 
           />
+          <Text className="text-lg text-gray-100 font-playfair2">  Email</Text>
           <TextInput 
             value={email} 
             style={styles.input} 
@@ -63,6 +73,7 @@ export default function SignUp() {
             autoCapitalize="none" 
             onChangeText={(text) => setEmail(text)} 
           />
+          <Text className="text-lg text-gray-100 font-playfair2">  Password</Text>
           <TextInput 
             secureTextEntry={true} 
             value={password} 
@@ -71,6 +82,7 @@ export default function SignUp() {
             autoCapitalize="none" 
             onChangeText={(text) => setPassword(text)} 
           />
+          <Text className="text-lg text-gray-100 font-playfair2">  Confirm Password</Text>
           <TextInput
             secureTextEntry={true}
             value={confirmPassword}
@@ -86,8 +98,8 @@ export default function SignUp() {
               <CustomButton 
                 title="Create an account" 
                 handlePress={signUp}
-                containerStyles="w-full mt-7" 
-            />
+                containerStyles="w-full mt-14" 
+              />
               <BackButton />
             </>
           )}

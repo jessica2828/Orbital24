@@ -1,19 +1,3 @@
-// import { StatusBar } from 'expo-status-bar';
-// import { ImageBackground, Text, View } from 'react-native';
-// import { Link } from 'expo-router';
-
-// export default function App() {
-//     return (
-//         <ImageBackground source={require('../assets/images/outdoor.png')}>
-//             <View className="flex-1 items-center justify-center bg-white">
-//                 <Text className="text-3xl font-pblack">Hello :)</Text>
-//                 <StatusBar style="auto" />
-//                 <Link href="/profile" style={{ color: "blue" }}>Go to Profile</Link>
-//             </View>
-//         </ImageBackground>    
-//     );
-// } 
-
 import { StatusBar } from 'expo-status-bar';
 import { Image, ImageBackground, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Link, Redirect, router } from 'expo-router';
@@ -23,16 +7,15 @@ import CustomButton from '@/components/CustomButton';
 
 export default function App() {
     return (
-        <SafeAreaView className="bg-black h-full">
             <ScrollView contentContainerStyle={{ height: '100%'}}>
                 <ImageBackground source={ require('../assets/images/indoor.png')} style={styles.backgroundImage}>
                     <View style={styles.overlay} />
                     <View style={styles.container}>
-                        <Image 
+                        {/* <Image 
                             source={images.logo} 
                             className="w-[130px] h-[84px]"
                             resizeMode="contain"
-                        />
+                        /> */}
                         <StatusBar style="light" />
                         <CustomButton 
                             title="Login" 
@@ -45,7 +28,6 @@ export default function App() {
                     </View>
                 </ImageBackground>
             </ScrollView>
-        </SafeAreaView>
     );
 }
 
@@ -59,13 +41,13 @@ const styles = StyleSheet.create({
     },
     overlay: {
         ...StyleSheet.absoluteFillObject,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Adjust the opacity as needed
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', 
     },
     container: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        //backgroundColor: 'rgba(255, 255, 255, 0.5)', // Semi-transparent background
+        //backgroundColor: 'rgba(255, 255, 255, 0.5)', 
     },
     text: {
         fontSize: 24,
@@ -77,5 +59,4 @@ const styles = StyleSheet.create({
         marginTop: 6,
     },
 });
-
 

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, Button, KeyboardAvoidingView, ImageBackground } from 'react-native';
+import { View, Image, Text, StyleSheet, TextInput, Button, KeyboardAvoidingView, ImageBackground } from 'react-native';
 import React, { useState } from 'react';
 import { Link, Redirect, router } from 'expo-router';
 import { FIREBASE_AUTH } from '@/src/FirebaseConfig';
@@ -6,6 +6,7 @@ import { ActivityIndicator } from 'react-native-paper';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import CustomButton from '@/components/CustomButton';
 import BackButton from '@/components/BackButton';
+import { images } from '../../constants';
 
 export default function SignUp() {
   const [email, setEmail] = useState('');
@@ -18,23 +19,10 @@ export default function SignUp() {
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
       console.log(response);
+      router.replace('/home');
     } catch (error) {
       console.log(error);
       alert('Sign in failed: ' + error.message)
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  const signUp = async () => {
-    setLoading(true);
-    try {
-      const response = await createUserWithEmailAndPassword(auth, email, password);
-      console.log(response);
-      alert('Check your email!')
-    } catch (error) {
-      console.log(error);
-      alert('Sign up failed: ' + error.message)
     } finally {
       setLoading(false);
     }
@@ -45,7 +33,14 @@ export default function SignUp() {
       <View style={styles.overlay} />
       <View style={styles.container}>
         <KeyboardAvoidingView behavior='padding'>
+          {/* <Image 
+              source={images.logo} 
+              className="w-[130px] h-[84px]"
+              resizeMode="contain"
+          /> */}
+          <Text className="text-lg text-gray-100 font-playfair2">  Email</Text>
           <TextInput value={email} style={styles.input} placeholder="Email" autoCapitalize="none" onChangeText={(text) => setEmail(text)}></TextInput>
+          <Text className="text-lg text-gray-100 font-playfair2">  Password</Text>
           <TextInput secureTextEntry={true} value={password} style={styles.input} placeholder="Password" autoCapitalize="none" onChangeText={(text) => setPassword(text)}></TextInput>
           {loading ? ( 
             <ActivityIndicator size="large" color="#fff" />
@@ -54,7 +49,14 @@ export default function SignUp() {
               <CustomButton 
                 title="Login" 
                 handlePress={signIn}
-                containerStyles="w-full mt-7" />
+                containerStyles="w-full mt-14" 
+              />
+              
+              <View className="justify-center pt-3 flex-row gap-2">
+                <Text className="flex-row text-lg text-gray-100 font-playfair2 justify-right">Don't have an account?</Text>
+                <Link href="/sign-up" className="text-lg font-playfair2 text-white justify-right">Sign up</Link>
+              </View>
+
               <BackButton />
             </>
           )}
