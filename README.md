@@ -16,13 +16,11 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
     npx expo start
    ```
 
-Milestone I Submission
-
-Deployment Details
+**Deployment Details**
 
 Download Expo Go on your mobile devices and scan the QR code below with Expo Go (Android) or the Camera app (iOS) to test out our app! 
 
-
+![QR Code](https://raw.githubusercontent.com/jessica2828/Orbital24/main/assets/expoQR.png)
 
 Alternatively, enter the following URL on Expo Go: exp://10.110.102.227:8081 
 
@@ -100,9 +98,6 @@ Personalised Customization: Offers extensive customization options for character
 Stress-Relief through Idle Animations: Includes cute idle animations for stress relief during breaks, providing a calming and enjoyable experience.
 Community Connectivity: Facilitates social interaction through visiting friends’ houses and sharing progress on social media, fostering a sense of community.
 Comprehensive Tracking: Allows users to record and reflect on their focus sessions, moods, and in-game adventures, helping them understand and improve their productivity patterns over time.
-
-
-
 
 
 Application Design Flow:
