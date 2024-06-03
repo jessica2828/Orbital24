@@ -102,5 +102,5 @@ While there are numerous productivity apps and idle games available, our app uni
 ![Diagram](https://github.com/jessica2828/Orbital24/blob/main/assets/class-diagram.png)
 
 ## Project Log Spreadsheet
-![Project Log](https://docs.google.com/spreadsheets/d/1aqz_lBaMq1AUZrx-7_5d2Em2vpPQT2FWTYVoaX9J4WU/edit?usp=sharing)
+[Project Log](https://docs.google.com/spreadsheets/d/1aqz_lBaMq1AUZrx-7_5d2Em2vpPQT2FWTYVoaX9J4WU/edit?usp=sharing)
 
