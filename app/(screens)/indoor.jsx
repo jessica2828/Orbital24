@@ -11,7 +11,14 @@ export default function App() {
     return (
         <ScrollView contentContainerStyle={{ height: '100%'}}>
             <ImageBackground source={ require('../../assets/images/indoor.png')} style={styles.backgroundImage}>
-                <View style={styles.container}>
+                <View style={styles.containerGallery}>
+                    <CustomButton 
+                        title="Gallery" 
+                        handlePress={() => router.push('/gallery')}
+                        containerStyles="w-2/5 mt-14" 
+                    /> 
+                </View>
+                <View style={styles.containerFocusSession}>
                     <CustomButton 
                         title="Start Focus Session" 
                         handlePress={() => router.push('/focus-session')}
@@ -32,11 +39,20 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
     },
-    container: {
+    containerFocusSession: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
+        top: 0,
+        bottom: 100,
+        left: 100
+        // alignItems: 'center',
+        // justifyContent: 'center',
         //backgroundColor: 'rgba(255, 255, 255, 0.5)', 
+    },
+    containerGallery: {
+        flex: 1,
+        top: 150,
+        bottom: 10,
+        left: 240
     },
     text: {
         fontSize: 24,

@@ -1,7 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { Image, ImageBackground, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Link, Redirect, router } from 'expo-router';
-import { images } from '../constants';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '@/components/CustomButton';
 

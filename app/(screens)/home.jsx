@@ -8,35 +8,49 @@ import BackButton from '@/components/BackButton';
 
 export default function Home() {
     return (
-            <ScrollView contentContainerStyle={{ height: '100%'}}>
-                <ImageBackground source={ require('../../assets/images/outdoor.png')} style={styles.backgroundImage}>
-                    <View style={styles.containerRoom}>
-                        <CustomButton 
-                          title="Go to Room" 
-                          handlePress={() => router.push('/indoor')}
-                          textStyles="font-playfair2"
-                          containerStyles="w-2/5 mt-5"
-                        />
-                        <StatusBar style="light" />
-                    </View>
-                    <View style={styles.containerFriends}>
-                        <CustomButton 
-                          title="View Pond" 
-                          handlePress={() => router.push('/indoor')}
-                          textStyles="font-playfair2"
-                          containerStyles="w-2/5 mt-5"
-                        />
-                    </View>
-                    <View style={styles.containerShop}>
-                        <CustomButton 
-                          title="Go to Shop" 
-                          handlePress={() => router.push('/indoor')}
-                          textStyles="font-playfair2"
-                          containerStyles="w-2/5 mt-5"
-                        />
-                    </View>
-                </ImageBackground>
-            </ScrollView>
+      <ScrollView contentContainerStyle={{ height: '100%'}}>
+          <ImageBackground source={ require('../../assets/images/outdoor.png')} style={styles.backgroundImage}>
+              {/* <View style={styles.containerCurrency}>
+                <Image source={require('../../assets/images/pearl.png')} className="w-14 h-14">
+                </Image>
+                <Image source={require('../../assets/images/shell.png')} className="w-14 h-14">
+                </Image>
+              </View> */}
+              <View style={styles.containerRoom}>
+                  <CustomButton 
+                    title="Go to Room" 
+                    handlePress={() => router.push('/indoor')}
+                    textStyles="font-playfair2"
+                    containerStyles="w-2/5 mt-5"
+                  />
+                  <StatusBar style="light" />
+              </View>
+              <View style={styles.containerFriends}>
+                  <CustomButton 
+                    title="Friends" 
+                    handlePress={() => router.push('/friends')}
+                    textStyles="font-playfair2"
+                    containerStyles="w-1/3 mt-5"
+                  />
+              </View>
+              <View style={styles.containerPond}>
+                  <CustomButton 
+                    title="View Pond" 
+                    handlePress={() => router.push('/pond')}
+                    textStyles="font-playfair2"
+                    containerStyles="w-1/3 mt-5"
+                  />
+              </View>
+              <View style={styles.containerShop}>
+                  <CustomButton 
+                    title="Go to Shop" 
+                    handlePress={() => router.push('/shop')}
+                    textStyles="font-playfair2"
+                    containerStyles="w-2/5 mt-5"
+                  />
+              </View>
+          </ImageBackground>
+      </ScrollView>
     );
 }
 
@@ -47,6 +61,11 @@ const styles = StyleSheet.create({
         justifyContent:  'center', 
         width: '100%',
         height: '100%',
+    },
+    containerCurrency: {
+        flex: 1,
+        top: 0,
+        flexDirection: 'row'
     },
     containerRoom: {
         flex: 1,
@@ -61,11 +80,17 @@ const styles = StyleSheet.create({
       bottom: 40,
       left: 40
     },
-    containerFriends: {
+    containerPond: {
       flex: 1,
       top: 5,
       bottom: 90,
       left: 150
+    },
+    containerFriends: {
+      flex: 1,
+      top: 30,
+      bottom: 90,
+      left: 270
     },
     text: {
         fontSize: 24,
