@@ -1,10 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { Image, ImageBackground, ScrollView, StyleSheet, Text, View, Button } from 'react-native';
 import { Link, Redirect, router } from 'expo-router';
-import { images } from '../../constants';
-import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '@/components/CustomButton';
-import BackButton from '@/components/BackButton';
+import { useSpring, animated } from '@react-spring/native';
 
 export default function Home() {
     return (
@@ -16,6 +14,7 @@ export default function Home() {
                 <Image source={require('../../assets/images/shell.png')} className="w-14 h-14">
                 </Image>
               </View> */}
+                
               <View style={styles.containerRoom}>
                   <CustomButton 
                     title="Go to Room" 

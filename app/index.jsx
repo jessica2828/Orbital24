@@ -3,9 +3,15 @@ import { Image, ImageBackground, ScrollView, StyleSheet, Text, View } from 'reac
 import { Link, Redirect, router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '@/components/CustomButton';
+import 'react-native-gesture-handler';
+import { enableScreens } from 'react-native-screens';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
+enableScreens();
 
 export default function App() {
     return (
+        <GestureHandlerRootView style={{ flex: 1 }}>
             <ScrollView contentContainerStyle={{ height: '100%'}}>
                 <ImageBackground source={ require('../assets/images/indoor.png')} style={styles.backgroundImage}>
                     <View style={styles.overlay} />
@@ -27,6 +33,7 @@ export default function App() {
                     </View>
                 </ImageBackground>
             </ScrollView>
+        </GestureHandlerRootView>
     );
 }
 

@@ -1,22 +1,23 @@
 import { View, Image, Text, StyleSheet, TextInput, Button, KeyboardAvoidingView, ImageBackground } from 'react-native';
 import React, { useState } from 'react';
-import { Link, Redirect, router, useRouter } from 'expo-router';
+import { router, useRouter } from 'expo-router';
 import { FIREBASE_AUTH, FIRESTORE_DB } from '@/src/FirebaseConfig';
 import { ActivityIndicator } from 'react-native-paper';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { setDoc, doc } from 'firebase/firestore';
 import CustomButton from '@/components/CustomButton';
 import BackButton from '@/components/BackButton';
-import { images } from '../../constants';
 
 export default function SignUp() {
   // ask for user's name
 
-  //const [name, setName] = useState('');
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const auth = FIREBASE_AUTH;
+  const db = FIRESTORE_DB;
 
   const signUp = async () => {
     if (password !== confirmPassword) {
@@ -35,9 +36,14 @@ export default function SignUp() {
     //   name: name,
     //   email: user.email,
     // });
+    
+    await setDoc(doc(db, 'users', user.uid), {
+      name: name,
+      email: email,
+    });
 
       console.log(response);
-      alert('Sign up successful.');
+      alert('Sign up successful!');
       router.replace('/sign-in');
     } catch (error) {
       console.log(error);
@@ -52,18 +58,13 @@ export default function SignUp() {
       <View style={styles.overlay} />
       <View style={styles.container}>
         <KeyboardAvoidingView behavior='padding'>
-          {/* <Image 
-              source={images.logo} 
-              className="w-[130px] h-[84px]"
-              resizeMode="contain"
-          /> */}
           <Text className="text-lg text-gray-100 font-playfair2">  Name</Text>
           <TextInput 
-            //value={name} 
+            value={name} 
             style={styles.input}
             placeholder="Name"
             autoCapitalize="none"
-            //onChangeText={(text) => setName(text)} 
+            onChangeText={(text) => setName(text)} 
           />
           <Text className="text-lg text-gray-100 font-playfair2">  Email</Text>
           <TextInput 

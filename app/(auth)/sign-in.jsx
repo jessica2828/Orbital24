@@ -6,9 +6,8 @@ import { ActivityIndicator } from 'react-native-paper';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import CustomButton from '@/components/CustomButton';
 import BackButton from '@/components/BackButton';
-import { images } from '../../constants';
 
-export default function SignUp() {
+export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -33,11 +32,6 @@ export default function SignUp() {
       <View style={styles.overlay} />
       <View style={styles.container}>
         <KeyboardAvoidingView behavior='padding'>
-          {/* <Image 
-              source={images.logo} 
-              className="w-[130px] h-[84px]"
-              resizeMode="contain"
-          /> */}
           <Text className="text-lg text-gray-100 font-playfair2">  Email</Text>
           <TextInput value={email} style={styles.input} placeholder="Email" autoCapitalize="none" onChangeText={(text) => setEmail(text)}></TextInput>
           <Text className="text-lg text-gray-100 font-playfair2">  Password</Text>
@@ -91,38 +85,3 @@ const styles = StyleSheet.create({
     height: '100%',
   }
 });
-
-
-
-// import { View, Text } from 'react-native'
-// import React from 'react'
-// import { SafeAreaView } from 'react-native-safe-area-context'
-
-// const SignIn = () => {
-//   return (
-//     <SafeAreaView className="bg-black h-full">
-//       <ScrollView>
-//         <ImageBackground source={ require('../assets/images/indoor.png')} style={styles.backgroundImage}>
-//           <View className="w-4/5 just">
-//             <Image 
-//               source={images.logo} 
-//               className="w-[130px] h-[84px]"
-//               resizeMode="contain"
-//             />
-//             <StatusBar style="light" />
-//             <CustomButton 
-//                   title="Login" 
-//                   handlePress={() => router.push('/sign-in')}
-//                   containerStyles="w-3/5 mt-7" />
-//             <CustomButton 
-//                   title="Create an account" 
-//                   handlePress={() => router.push('/sign-up')}
-//                   containerStyles="w-3/5 mt-7" />
-//           </View>
-//         </ImageBackground>
-//       </ScrollView>
-//     </SafeAreaView>
-//   )
-// }
-
-// export default SignIn
