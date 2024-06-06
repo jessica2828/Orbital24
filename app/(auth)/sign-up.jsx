@@ -9,8 +9,6 @@ import CustomButton from '@/components/CustomButton';
 import BackButton from '@/components/BackButton';
 
 export default function SignUp() {
-  // ask for user's name
-
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -30,12 +28,6 @@ export default function SignUp() {
     try {
       const response = await createUserWithEmailAndPassword(auth, email, password);
       const user = response.user;
-
-    // use firestore
-    // const nameResponse = await FIRESTORE_DB.collection('users').doc(user.uid).set({
-    //   name: name,
-    //   email: user.email,
-    // });
     
     await setDoc(doc(db, 'users', user.uid), {
       name: name,
