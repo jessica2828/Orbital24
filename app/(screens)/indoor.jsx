@@ -3,23 +3,23 @@
 import { StatusBar } from 'expo-status-bar';
 import { Image, ImageBackground, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Link, Redirect, router } from 'expo-router';
-import { images } from '../../constants';
 import { SafeAreaView } from 'react-native-safe-area-context'
-import CustomButton from '@/components/CustomButton';
+import HomeButton from '@/components/HomeButton';
+
 
 export default function App() {
     return (
         <ScrollView contentContainerStyle={{ height: '100%'}}>
             <ImageBackground source={ require('../../assets/images/indoor.png')} style={styles.backgroundImage}>
                 <View style={styles.containerGallery}>
-                    <CustomButton 
+                    <HomeButton 
                         title="Gallery" 
                         handlePress={() => router.push('/gallery')}
                         containerStyles="w-2/5 mt-14" 
                     /> 
                 </View>
                 <View style={styles.containerFocusSession}>
-                    <CustomButton 
+                    <HomeButton 
                         title="Start Focus Session" 
                         handlePress={() => router.push('/focus-session')}
                         containerStyles="w-3/5 mt-14" 

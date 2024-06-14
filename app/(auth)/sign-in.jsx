@@ -32,9 +32,9 @@ export default function SignIn() {
       <View style={styles.overlay} />
       <View style={styles.container}>
         <KeyboardAvoidingView behavior='padding'>
-          <Text className="text-lg text-gray-100 font-playfair2">  Email</Text>
+          <Text className="text-base text-gray-100 font-playfair2">  Email</Text>
           <TextInput value={email} style={styles.input} placeholder="Email" autoCapitalize="none" onChangeText={(text) => setEmail(text)}></TextInput>
-          <Text className="text-lg text-gray-100 font-playfair2">  Password</Text>
+          <Text className="text-base text-gray-100 font-playfair2">  Password</Text>
           <TextInput secureTextEntry={true} value={password} style={styles.input} placeholder="Password" autoCapitalize="none" onChangeText={(text) => setPassword(text)}></TextInput>
           {loading ? ( 
             <ActivityIndicator size="large" color="#fff" />
@@ -47,8 +47,8 @@ export default function SignIn() {
               />
               
               <View className="justify-center pt-3 flex-row gap-2">
-                <Text className="flex-row text-lg text-gray-100 font-playfair2 justify-right">Don't have an account?</Text>
-                <Link href="/sign-up" className="text-lg font-playfair2 text-white justify-right">Sign up</Link>
+                <Text className="flex-row text-sm text-gray-100 font-playfair2 justify-right">Don't have an account?</Text>
+                <Link href="/sign-up" className="text-sm font-playfair2 text-white justify-right">Sign up</Link>
               </View>
 
               <BackButton />

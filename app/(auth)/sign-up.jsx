@@ -50,7 +50,7 @@ export default function SignUp() {
       <View style={styles.overlay} />
       <View style={styles.container}>
         <KeyboardAvoidingView behavior='padding'>
-          <Text className="text-lg text-gray-100 font-playfair2">  Name</Text>
+          <Text className="text-base text-gray-100 font-playfair2">  Name</Text>
           <TextInput 
             value={name} 
             style={styles.input}
@@ -58,7 +58,7 @@ export default function SignUp() {
             autoCapitalize="none"
             onChangeText={(text) => setName(text)} 
           />
-          <Text className="text-lg text-gray-100 font-playfair2">  Email</Text>
+          <Text className="text-base text-gray-100 font-playfair2">  Email</Text>
           <TextInput 
             value={email} 
             style={styles.input} 
@@ -66,7 +66,7 @@ export default function SignUp() {
             autoCapitalize="none" 
             onChangeText={(text) => setEmail(text)} 
           />
-          <Text className="text-lg text-gray-100 font-playfair2">  Password</Text>
+          <Text className="text-base text-gray-100 font-playfair2">  Password</Text>
           <TextInput 
             secureTextEntry={true} 
             value={password} 
@@ -75,7 +75,7 @@ export default function SignUp() {
             autoCapitalize="none" 
             onChangeText={(text) => setPassword(text)} 
           />
-          <Text className="text-lg text-gray-100 font-playfair2">  Confirm Password</Text>
+          <Text className="text-base text-gray-100 font-playfair2">  Confirm Password</Text>
           <TextInput
             secureTextEntry={true}
             value={confirmPassword}
