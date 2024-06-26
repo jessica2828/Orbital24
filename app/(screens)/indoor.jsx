@@ -1,11 +1,11 @@
-
-
+import React, { useEffect, useState } from 'react';
+import { Audio } from 'expo-av';
 import { StatusBar } from 'expo-status-bar';
 import { Image, ImageBackground, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Link, Redirect, router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import HomeButton from '@/components/HomeButton';
-
+import BackButton from '@/components/BackButton';
 
 export default function App() {
     return (
@@ -15,7 +15,7 @@ export default function App() {
                     <HomeButton 
                         title="Gallery" 
                         handlePress={() => router.push('/gallery')}
-                        containerStyles="w-2/5 mt-14" 
+                        containerStyles="w-3/5 mt-14" 
                     /> 
                 </View>
                 <View style={styles.containerFocusSession}>
@@ -24,6 +24,7 @@ export default function App() {
                         handlePress={() => router.push('/focus-session')}
                         containerStyles="w-3/5 mt-14" 
                     /> 
+                    <BackButton />
                     <StatusBar style="light" />
                 </View>
             </ImageBackground>
@@ -50,9 +51,9 @@ const styles = StyleSheet.create({
     },
     containerGallery: {
         flex: 1,
-        top: 150,
+        top: 180,
         bottom: 10,
-        left: 240
+        left: 170,
     },
     text: {
         fontSize: 24,

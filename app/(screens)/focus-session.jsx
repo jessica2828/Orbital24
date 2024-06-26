@@ -5,6 +5,8 @@ import NotificationPopup from '@/components/NotificationPopup';
 import { FIRESTORE_DB } from '@/src/FirebaseConfig'; 
 import { collection, addDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
+import { Audio } from 'expo-av';
+import SoundPicker from '@/components/SoundPicker';
 
 const screen = Dimensions.get("window");
 const formatNumber = number => `0${number}`.slice(-2);
@@ -37,9 +39,17 @@ export default class FocusSessionScreen extends Component {
     startTime: null,
     elapsedTime: 0,
     showNotification: false,
+    sound: null,
+    soundPickerVisible: false,
+    selectedSound: { id: '1', name: 'Study', file: require('../../assets/music/lofi-study.mp3')},
   };
 
   interval = null;
+
+  // async componentDidMount() {
+  //   const { sound } = await Audio.Sound.createAsync(require('../../assets/music/lofi-study.mp3'));
+  //   this.setState({ sound });
+  // }
 
   componentDidUpdate = (prevProp, prevState) => {
     if (this.state.remainingSeconds === 0 && prevState.remainingSeconds !== 0) {
@@ -51,15 +61,36 @@ export default class FocusSessionScreen extends Component {
     if (this.interval) {
       clearInterval(this.interval);
     }
+    if (this.state.sound) {
+      this.state.sound.unloadAsync();
+    }
   }
 
-  start = () => {
+  playSound = async () => {
+    const { sound } = await Audio.Sound.createAsync(
+      this.state.selectedSound.file,
+      { isLooping: true } 
+    );
+    this.setState({ sound });
+    await sound.playAsync();
+  };
+
+  stopSound = async () => {
+    if (this.state.sound) {
+      await this.state.sound.stopAsync();
+      await this.state.sound.unloadAsync();
+      this.setState({ sound: null });
+    }
+  };
+
+  start = async () => {
     startTime = Date.now();
     this.setState(state => ({
       remainingSeconds: parseInt(state.selectedMinutes, 10) * 60,
       isRunning: true,
       startTime,
     }));
+    this.playSound();
     this.interval = setInterval(() => {
       this.setState(state => ({
         remainingSeconds: state.remainingSeconds - 1,
@@ -68,48 +99,32 @@ export default class FocusSessionScreen extends Component {
     }, 1000);
   };
 
-  pause = () => {
+  pause = async () => {
     if (this.interval) {
       clearInterval(this.interval);
       this.interval = null;
     }
+    if (this.state.sound) {
+      await this.state.sound.pauseAsync();
+    }
   };
 
-  resume = () => {
+  resume = async () => {
     this.interval = setInterval(() => {
       this.setState(state => ({
         remainingSeconds: state.remainingSeconds - 1,
       }));
     }, 1000);
+    if (this.state.sound) {
+      await this.state.sound.playAsync();
+    }
   };
-
-  // stop = async () => {
-  //   clearInterval(this.interval);
-  //   this.interval = null;
-  //   const { startTime } = this.state;
-  //   if (startTime) {
-  //     const elapsedTime = Date.now() - startTime;
-  //     try {
-  //       const docRef = await addDoc(collection(FIRESTORE_DB, 'sessions'), {
-  //         startTime: new Date(startTime),
-  //         elapsedTime: elapsedTime,
-  //       });
-  //       console.log('Elapsed time saved to Firestore with ID:', docRef.id);
-  //     } catch (error) {
-  //       console.error('Error adding document:', error);
-  //     }
-  //   }
-  //   this.setState({
-  //     remainingSeconds: 5,
-  //     isRunning: false,
-  //     startTime: null,
-  //   });
-  // };
 
   stop = async () => {
     clearInterval(this.interval);
     this.interval = null;
     await this.recordTimeElapsed();
+    this.stopSound();
     this.setState({
       remainingSeconds: 0,
       isRunning: false,
@@ -172,7 +187,7 @@ export default class FocusSessionScreen extends Component {
   // };
 
   showNotification = () => {
-    // do smth else here - show stats to user
+    // do smth else here - show stats to user, open new notif popup?
     alert("Session ended, focus time recorded.")
   }
 
@@ -217,6 +232,23 @@ export default class FocusSessionScreen extends Component {
     </View>
   );
 
+  openSoundPicker = () => {
+    this.setState({ soundPickerVisible: true });
+  }
+
+  closeSoundPicker = () => {
+    this.setState({ soundPickerVisible: false });
+  }
+
+  selectSound = async (sound) => {
+    await this.stopSound();
+    this.setState({ selectedSound: sound, soundPickerVisible: false }, () => {
+      if (this.state.isRunning) {
+        this.playSound();
+      }
+    });
+  }
+
   render() {
     const { minutes, seconds } = getRemaining(this.state.remainingSeconds);
     return (
@@ -240,6 +272,10 @@ export default class FocusSessionScreen extends Component {
             </TouchableOpacity>
           )}
 
+          <TouchableOpacity onPress={this.openSoundPicker} style={styles.soundButton}>
+            <Text style={styles.soundButtonText}>Select sound</Text>
+          </TouchableOpacity>
+
           {this.state.showNotification && (
             <NotificationPopup
               message="End this session and give up? You will not get any reward.."
@@ -249,6 +285,11 @@ export default class FocusSessionScreen extends Component {
               actionText="End now"
             />
           )}
+          <SoundPicker 
+            visible={this.state.soundPickerVisible} 
+            onClose={this.closeSoundPicker} 
+            onSelect={this.selectSound} 
+          />
         </View>
       </ImageBackground>
     );
@@ -303,7 +344,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       android: {
         color: "white",
-        backgroundColor: "rgba(92, 92, 92, 0.206)",
+        backgroundColor: "#90cdf8",
       },
     }),
   },
@@ -320,6 +361,17 @@ const styles = StyleSheet.create({
   pickerContainer: {
     flexDirection: "row",
     alignItems: "center",
+  },
+  soundButton: {
+    marginTop: 20,
+    padding: 12,
+    backgroundColor: '#0967a8',
+    borderRadius: 25,
+    alignItems: 'center',
+  },
+  soundButtonText: {
+    color: 'white',
+    fontSize: 16,
   },
 });
 

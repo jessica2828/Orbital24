@@ -6,11 +6,14 @@ import { ActivityIndicator } from 'react-native-paper';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import CustomButton from '@/components/CustomButton';
 import BackButton from '@/components/BackButton';
+import NotificationPopup from '@/components/NotificationPopup';
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
   const auth = FIREBASE_AUTH;
 
   const signIn = async () => {
@@ -21,7 +24,9 @@ export default function SignIn() {
       router.replace('/home');
     } catch (error) {
       console.log(error);
-      alert('Sign in failed: ' + error.message)
+      //alert('Sign in failed: ' + error.message)
+      setErrorMessage(error.message);
+      setIsPopupVisible(true);
     } finally {
       setLoading(false);
     }

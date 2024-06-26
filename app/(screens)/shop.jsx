@@ -1,9 +1,12 @@
 import { View, Text } from 'react-native'
 import React from 'react'
+import BackButton from '@/components/BackButton';
+
 
 const shop = () => {
   return (
     <View>
+      <BackButton />
       <Text>Shop</Text>
     </View>
   )

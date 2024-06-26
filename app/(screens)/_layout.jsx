@@ -26,6 +26,30 @@ const ScreensLayout = () => {
             headerShown: false
           }}
         />
+        <Stack.Screen
+          name="indoor"
+          options={{
+            headerShown: false
+          }}
+        />
+        <Stack.Screen
+          name="friends"
+          options={{
+            headerShown: false
+          }}
+        />
+        <Stack.Screen
+          name="pond"
+          options={{
+            headerShown: false
+          }}
+        />
+        <Stack.Screen
+          name="shop"
+          options={{
+            headerShown: false
+          }}
+        />
       </Stack>
 
       <StatusBar backgroundColor='black' style='light' />

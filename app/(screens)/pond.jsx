@@ -2,12 +2,15 @@ import { StatusBar } from 'expo-status-bar';
 import { Image, ImageBackground, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Link, Redirect, router } from 'expo-router';
 import CustomButton from '@/components/CustomButton';
+import BackButton from '@/components/BackButton';
+
 
 export default function App() {
     return (
         <ScrollView contentContainerStyle={{ height: '100%'}}>
             <ImageBackground source={ require('../../assets/images/companions.png')} style={styles.backgroundImage}>
                 <View style={styles.container}>
+                    <BackButton />
                     <StatusBar style="light" />
                 </View>
             </ImageBackground>
