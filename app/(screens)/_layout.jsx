@@ -50,6 +50,12 @@ const ScreensLayout = () => {
             headerShown: false
           }}
         />
+        <Stack.Screen
+          name="focus-session"
+          options={{
+            headerShown: false
+          }}
+        />
       </Stack>
 
       <StatusBar backgroundColor='black' style='light' />

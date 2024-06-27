@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
+    fontFamily: 'PlayfairDisplay',
     fontWeight: 'bold',
     color: 'white',
     marginBottom: 20,
@@ -62,6 +63,7 @@ const styles = StyleSheet.create({
   },
   soundText: {
     fontSize: 18,
+    fontFamily: 'PlayfairDisplay',
     color: 'white',
   },
   closeButton: {
@@ -74,5 +76,6 @@ const styles = StyleSheet.create({
   closeButtonText: {
     color: 'white',
     fontSize: 16,
+    fontFamily: 'PlayfairDisplay',
   },
 });

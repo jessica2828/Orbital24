@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 
-const Currency = ({ score }) => {
+const Currency = ({ pearl, shell }) => {
   return (
     <View style={styles.container}>
       <Image source={require('../../assets/images/pearl.png')} style={styles.currencyImage} />
-      <Text style={styles.currency}>{score}</Text>
+      <Text style={styles.currency}>{pearl}</Text>
       <Image source={require('../../assets/images/shell.png')} style={styles.currencyImage} />
-      <Text style={styles.currency}>{score}</Text>
+      <Text style={styles.currency}>{shell}</Text>
     </View>
   );
 };
@@ -34,7 +34,8 @@ const styles = StyleSheet.create({
     currency: {
         color: 'white',
         fontSize: 14,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontFamily: 'PlayfairDisplay',
     },
 })
 

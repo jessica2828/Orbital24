@@ -12,47 +12,51 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { FIRESTORE_DB } from '@/src/FirebaseConfig';
 
-export default function App() {
-    const [currency, setCurrency] = useState(0);
-
-  const fetchCurrency = async (user) => {
-    const userDoc = doc(FIRESTORE_DB, 'users', user.uid);
-    const userSnapshot = await getDoc(userDoc);
-    if (userSnapshot.exists()) {
-      setCurrency(userSnapshot.data().currency || 0);
-    }
-  };
-
-  useEffect(() => {
-    const auth = getAuth();
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        fetchCurrency(user);
-      } else {
-        setCurrency(0);
-      }
-    });
-
-    return () => {
-      if (unsubscribe) {
-        unsubscribe();
+export default function Indoor() {
+    const [pearlCurrency, setPearlCurrency] = useState(0);
+    const [shellCurrency, setShellCurrency] = useState(0);
+  
+    const fetchCurrency = async (user) => {
+      const userDoc = doc(FIRESTORE_DB, 'users', user.uid);
+      const userSnapshot = await getDoc(userDoc);
+      if (userSnapshot.exists()) {
+        setPearlCurrency(userSnapshot.data().pearlCurrency || 0);
+        setShellCurrency(userSnapshot.data().shellCurrency || 0);
       }
     };
-  }, []);
-
-  useFocusEffect(
-    useCallback(() => {
+  
+    useEffect(() => {
       const auth = getAuth();
-      const user = auth.currentUser;
-      if (user) {
-        fetchCurrency(user);
-      }
-    }, [])
-  );
+      const unsubscribe = onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          fetchCurrency(user);
+        } else {
+          setPearlCurrency(0);
+          setShellCurrency(0);
+        }
+      });
+  
+      return () => {
+        if (unsubscribe) {
+          unsubscribe();
+        }
+      };
+    }, []);
+  
+    useFocusEffect(
+      useCallback(() => {
+        const auth = getAuth();
+        const user = auth.currentUser;
+        if (user) {
+          fetchCurrency(user);
+        }
+      }, [])
+    );
+  
     return (
         <ScrollView contentContainerStyle={{ height: '100%'}}>
             <ImageBackground source={ require('../../assets/images/indoor.png')} style={styles.backgroundImage}>
-            <Currency score={currency} style={styles.currency} />
+                <Currency pearl={pearlCurrency} shell={shellCurrency} />
                 <View style={styles.containerGallery}>
                     <HomeButton 
                         title="Gallery" 
@@ -99,8 +103,8 @@ const styles = StyleSheet.create({
         flex: 1,
         top: 220,
         //bottom: 10,
-        width: '38%',
-        left: 260,
+        width: '20%',
+        left: 250,
     },
     text: {
         fontSize: 24,

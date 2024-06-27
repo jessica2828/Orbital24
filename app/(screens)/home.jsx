@@ -35,13 +35,15 @@ export default function Home({ navigation }) {
   //     }
   //   }
   // }, []);
-  const [currency, setCurrency] = useState(0);
+  const [pearlCurrency, setPearlCurrency] = useState(0);
+  const [shellCurrency, setShellCurrency] = useState(0);
 
   const fetchCurrency = async (user) => {
     const userDoc = doc(FIRESTORE_DB, 'users', user.uid);
     const userSnapshot = await getDoc(userDoc);
     if (userSnapshot.exists()) {
-      setCurrency(userSnapshot.data().currency || 0);
+      setPearlCurrency(userSnapshot.data().pearlCurrency || 0);
+      setShellCurrency(userSnapshot.data().shellCurrency || 0);
     }
   };
 
@@ -51,7 +53,8 @@ export default function Home({ navigation }) {
       if (user) {
         fetchCurrency(user);
       } else {
-        setCurrency(0);
+        setPearlCurrency(0);
+        setShellCurrency(0);
       }
     });
 
@@ -75,7 +78,7 @@ export default function Home({ navigation }) {
   return (
     <ImageBackground source={ require('../../assets/images/outdoor.png')} style={styles.backgroundImage}>
       <View style={styles.container}>
-      <Currency score={currency} style={styles.currency} />
+      <Currency pearl={pearlCurrency} shell={shellCurrency} />
         <View style={styles.containerRoom}>
             <HomeButton 
               title="Room" 
@@ -149,14 +152,16 @@ const styles = StyleSheet.create({
         marginTop: 200,
         marginBottom: 0,
         //marginRight: 120,
-        marginLeft: 10
+        marginLeft: 10,
         //backgroundColor: 'rgba(255, 255, 255, 0.5)', 
+        width: '30%'
     },
     containerShop: {
       flex: 1,
       top: 90,
       bottom: 0,
-      left: 50
+      left: 50,
+      width: '30%'
     },
     containerPond: {
       flex: 1,
@@ -164,13 +169,15 @@ const styles = StyleSheet.create({
       //bottom: 50,
       left: 150,
       //right: 100
+      width: '30%'
     },
     containerFriends: {
       flex: 2/5,
       top: 30,
       //bottom: 200,
-      left: 275,
+      left: 235,
       //right: 20
+      width: '10%'
     },
     text: {
         fontSize: 24,
