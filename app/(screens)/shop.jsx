@@ -1,14 +1,17 @@
-import { View, Text } from 'react-native'
+import { View, Text, ImageBackground } from 'react-native'
 import React from 'react'
 import BackButton from '@/components/BackButton';
 
 
 const shop = () => {
   return (
-    <View>
-      <BackButton />
-      <Text>Shop</Text>
-    </View>
+    <ImageBackground>
+      <View>
+        <Text>Shop</Text>
+        <BackButton />
+      </View>
+      
+    </ImageBackground>
   )
 }
 

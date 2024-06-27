@@ -1,20 +1,22 @@
 import React from 'react'
-import { Image, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import { getStatusBarHeight } from 'react-native-status-bar-height'
 import { Link, useNavigation, useRouter } from "expo-router";
 
 const BackButton = ({goBack}) => {
   const router = useRouter();
   return (
-    <TouchableOpacity 
-      onPress={() => router.back()} 
-      style={styles.container} 
-      testID='back'>
-      <Image
-        style={styles.image}
-        source={require('../assets/icons/left-arrow.png')}
-      />
-    </TouchableOpacity>
+    <View style={styles.button}>
+      <TouchableOpacity 
+        onPress={() => router.back()} 
+        style={styles.container} 
+        testID='back'>
+        <Image
+          style={styles.image}
+          source={require('../assets/icons/backbutton1.png')}
+        />
+      </TouchableOpacity>
+    </View>
   )
 }
 
@@ -25,8 +27,14 @@ const styles = StyleSheet.create({
     top: 5 + getStatusBarHeight(),
     left: 5
   },
+  button: {
+    flex: 1,
+    position: 'absolute',
+    bottom: 80,
+    left: 30,
+  },
   image: {
-    width: 32,
-    height: 27
+    width: 42,
+    height: 41
   }
 });

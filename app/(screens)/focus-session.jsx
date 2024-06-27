@@ -2,14 +2,17 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text, Dimensions, StatusBar, TouchableOpacity, Platform, ImageBackground } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import NotificationPopup from '@/components/NotificationPopup';
-import { FIRESTORE_DB } from '@/src/FirebaseConfig'; 
-import { collection, addDoc } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
+import { FIRESTORE_DB, FIREBASE_AUTH } from '@/src/FirebaseConfig'; 
+import { doc, getDoc, setDoc, updateDoc, collection, addDoc } from 'firebase/firestore';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { Audio } from 'expo-av';
 import SoundPicker from '@/components/SoundPicker';
+import Currency from './currency';
+import BackButton from '@/components/BackButton';
 
 const screen = Dimensions.get("window");
 const formatNumber = number => `0${number}`.slice(-2);
+const CURRENCY_INCREMENT = 10;
 
 const getRemaining = time => {
   const minutes = Math.floor(time / 60);
@@ -42,18 +45,34 @@ export default class FocusSessionScreen extends Component {
     sound: null,
     soundPickerVisible: false,
     selectedSound: { id: '1', name: 'Study', file: require('../../assets/music/lofi-study.mp3')},
+    currency: 0,
+    user: null,
   };
 
   interval = null;
 
-  // async componentDidMount() {
-  //   const { sound } = await Audio.Sound.createAsync(require('../../assets/music/lofi-study.mp3'));
-  //   this.setState({ sound });
-  // }
+  componentDidMount() {
+    this.unsubscribe = onAuthStateChanged(FIREBASE_AUTH, async (user) => {
+      if (user) {
+        const userDoc = doc(FIRESTORE_DB, 'users', user.uid);
+        const userSnapshot = await getDoc(userDoc);
+        if (userSnapshot.exists()) {
+          this.setState({ currency: userSnapshot.data().currency || 0 });
+        } else {
+          await setDoc(userDoc, { currency: 0 });
+        }
+        this.setState({ user });
+      } else {
+        this.setState({ user: null, currency: 0 });
+      }
+    });
+  }
+
 
   componentDidUpdate = (prevProp, prevState) => {
     if (this.state.remainingSeconds === 0 && prevState.remainingSeconds !== 0) {
       this.stop();
+      this.incrementCurrency();
     }
   };
 
@@ -63,6 +82,9 @@ export default class FocusSessionScreen extends Component {
     }
     if (this.state.sound) {
       this.state.sound.unloadAsync();
+    }
+    if (this.unsubscribe) {
+      this.unsubscribe();
     }
   }
 
@@ -156,7 +178,6 @@ export default class FocusSessionScreen extends Component {
     } else {
       console.error('No user is signed in: sign in to save your record!');
     }
-    
   };
 
 
@@ -249,12 +270,27 @@ export default class FocusSessionScreen extends Component {
     });
   }
 
+  // incrementCurrency = () => {
+  //   this.setState(prevState => ({ currency: prevState.currency + CURRENCY_INCREMENT }));
+  // };
+
+  incrementCurrency = async () => {
+    const newCurrency = this.state.currency + CURRENCY_INCREMENT;
+    this.setState({ currency: newCurrency });
+    const user = this.state.user;
+    if (user) {
+      const userDoc = doc(FIRESTORE_DB, 'users', user.uid);
+      await updateDoc(userDoc, { currency: newCurrency });
+    }
+  };
+
   render() {
     const { minutes, seconds } = getRemaining(this.state.remainingSeconds);
     return (
       <ImageBackground source={require('../../assets/images/focussession.png')} style={styles.backgroundImage}>
         <View style={styles.overlay} />
         <View style={styles.container}>
+        <Currency score={this.state.currency} style={styles.currency} />
           <StatusBar barStyle="light-content" />
           {this.state.isRunning ? (
             <Text style={styles.timerText}>{`${minutes}:${seconds}`}</Text>
@@ -290,6 +326,7 @@ export default class FocusSessionScreen extends Component {
             onClose={this.closeSoundPicker} 
             onSelect={this.selectSound} 
           />
+          <BackButton />
         </View>
       </ImageBackground>
     );
@@ -344,7 +381,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       android: {
         color: "white",
-        backgroundColor: "#90cdf8",
+        backgroundColor: "rgba(255, 255, 255, 0.3)",
       },
     }),
   },
@@ -363,15 +400,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   soundButton: {
-    marginTop: 20,
+    marginTop: 30,
     padding: 12,
     backgroundColor: '#0967a8',
-    borderRadius: 25,
+    borderRadius: 8,
     alignItems: 'center',
   },
   soundButtonText: {
     color: 'white',
-    fontSize: 16,
-  },
+    fontSize: 18,
+  }
 });
 

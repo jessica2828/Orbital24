@@ -10,9 +10,9 @@ export default function App() {
         <ScrollView contentContainerStyle={{ height: '100%'}}>
             <ImageBackground source={ require('../../assets/images/companions.png')} style={styles.backgroundImage}>
                 <View style={styles.container}>
-                    <BackButton />
                     <StatusBar style="light" />
                 </View>
+                <BackButton />
             </ImageBackground>
         </ScrollView>
     );

@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, ImageBackground } from 'react-native'
 import React from 'react'
 import SearchInput from '../../components/SearchInput'
 import { doc, setDoc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
@@ -27,11 +27,13 @@ const addFriend = async (currentUserId, friendEmail) => {
 
 const friends = () => {
   return (
+    <ImageBackground>
     <View>
       <Text>friends</Text>
       <SearchInput />
-      <BackButton />
     </View>
+    <BackButton />
+    </ImageBackground>
   )
 }
 
