@@ -13,7 +13,7 @@ const BackButton = ({goBack}) => {
         testID='back'>
         <Image
           style={styles.image}
-          source={require('../assets/icons/backbutton1.png')}
+          source={require('../assets/icons/left-arrow.png')}
         />
       </TouchableOpacity>
     </View>
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     left: 30,
   },
   image: {
-    width: 42,
-    height: 41
+    width: 35,
+    height: 28
   }
 });

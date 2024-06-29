@@ -6,7 +6,7 @@ import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import HomeButton from '@/components/HomeButton';
 import { useSpring, animated } from '@react-spring/native';
-//import { fadeTransition } from './CustomTransitionConfig'; // Import your custom transition config
+//import { fadeTransition } from './CustomTransitionConfig'; 
 import Currency from './currency';
 import { useFocusEffect } from '@react-navigation/native';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -15,6 +15,8 @@ import { FIRESTORE_DB } from '@/src/FirebaseConfig';
 
 
 export default function Home({ navigation }) {
+  //do later - add sound for homepage
+
   // const [sound, setSound] = useState();
 
   // const playSound = async () => {
@@ -37,6 +39,7 @@ export default function Home({ navigation }) {
   // }, []);
   const [pearlCurrency, setPearlCurrency] = useState(0);
   const [shellCurrency, setShellCurrency] = useState(0);
+  const [currentUserId, setCurrentUserId] = useState(null);
 
   const fetchCurrency = async (user) => {
     const userDoc = doc(FIRESTORE_DB, 'users', user.uid);
@@ -51,8 +54,10 @@ export default function Home({ navigation }) {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
+        setCurrentUserId(user.uid);
         fetchCurrency(user);
       } else {
+        setCurrentUserId(null);
         setPearlCurrency(0);
         setShellCurrency(0);
       }
@@ -90,7 +95,7 @@ export default function Home({ navigation }) {
         <View style={styles.containerFriends}>
           <HomeButton 
               title="Friends" 
-              handlePress={() => router.push('/friends')}
+              handlePress={() => router.push('/friends', { currentUserId })}
               textStyles="font-playfair2"
               containerStyles="w-1/3 mt-5"
           />

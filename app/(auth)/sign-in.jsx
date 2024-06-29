@@ -1,99 +1,5 @@
-// import { View, Image, Text, StyleSheet, TextInput, Button, KeyboardAvoidingView, ImageBackground } from 'react-native';
-// import React, { useState } from 'react';
-// import { Link, Redirect, router } from 'expo-router';
-// import { FIREBASE_AUTH } from '@/src/FirebaseConfig';
-// import { ActivityIndicator } from 'react-native-paper';
-// import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
-// import CustomButton from '@/components/CustomButton';
-// import BackButton from '@/components/BackButton';
-// import NotificationPopup from '@/components/NotificationPopup';
-
-// export default function SignIn() {
-//   const [email, setEmail] = useState('');
-//   const [password, setPassword] = useState('');
-//   const [loading, setLoading] = useState(false);
-//   const [errorMessage, setErrorMessage] = useState('');
-//   const [isPopupVisible, setIsPopupVisible] = useState(false);
-//   const auth = FIREBASE_AUTH;
-
-//   const signIn = async () => {
-//     setLoading(true);
-//     try {
-//       const response = await signInWithEmailAndPassword(auth, email, password);
-//       console.log(response);
-//       router.replace('/home');
-//     } catch (error) {
-//       console.log(error);
-//       //alert('Sign in failed: ' + error.message)
-//       setErrorMessage(error.message);
-//       setIsPopupVisible(true);
-//     } finally {
-//       setLoading(false);
-//     }
-//   }
-
-//   return (
-//     <ImageBackground source={ require('../../assets/images/indoor.png')} style={styles.backgroundImage}>
-//       <View style={styles.overlay} />
-//       <View style={styles.container}>
-//         <KeyboardAvoidingView behavior='padding'>
-//           <Text className="text-base text-gray-100 font-playfair2">  Email</Text>
-//           <TextInput value={email} style={styles.input} placeholder="Email" autoCapitalize="none" onChangeText={(text) => setEmail(text)}></TextInput>
-//           <Text className="text-base text-gray-100 font-playfair2">  Password</Text>
-//           <TextInput secureTextEntry={true} value={password} style={styles.input} placeholder="Password" autoCapitalize="none" onChangeText={(text) => setPassword(text)}></TextInput>
-//           {loading ? ( 
-//             <ActivityIndicator size="large" color="#fff" />
-//           ) : (
-//             <>
-//               <CustomButton 
-//                 title="Login" 
-//                 handlePress={signIn}
-//                 containerStyles="w-full mt-14" 
-//               />
-              
-//               <View className="justify-center pt-3 flex-row gap-2">
-//                 <Text className="flex-row text-sm text-gray-100 font-playfair2 justify-right">Don't have an account?</Text>
-//                 <Link href="/sign-up" className="text-sm font-playfair2 text-white justify-right">Sign up</Link>
-//               </View>
-
-//               <BackButton />
-//             </>
-//           )}
-//         </KeyboardAvoidingView>
-//       </View>
-//     </ImageBackground>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     marginHorizontal: 20,
-//     flex: 1,
-//     justifyContent: 'center'
-//   },
-//   overlay: {
-//     ...StyleSheet.absoluteFillObject,
-//     backgroundColor: 'rgba(0, 0, 0, 0.5)', // Adjust the opacity as needed
-//   },
-//   input: {
-//     marginVertical: 4,
-//     marginHorizontal: 2,
-//     height: 40,
-//     borderWidth: 1,
-//     borderRadius: 25,
-//     padding: 10,
-//     backgroundColor: '#fff'
-//   },
-//   backgroundImage: {
-//     flex: 1,
-//     width: '100%',
-//     height: '100%',
-//   }
-// });
-
-
-import { View, Text, StyleSheet, TextInput, KeyboardAvoidingView, ImageBackground } from 'react-native';
-import React, { useState } from 'react';
+import { View, Text, StyleSheet, TextInput, KeyboardAvoidingView, ImageBackground, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import { Link, router } from 'expo-router';
 import { FIREBASE_AUTH } from '@/src/FirebaseConfig';
 import { ActivityIndicator } from 'react-native-paper';
@@ -101,6 +7,10 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import CustomButton from '@/components/CustomButton';
 import BackButton from '@/components/BackButton';
 import NotificationPopup from '@/components/NotificationPopup';
+// import * as Google from 'expo-auth-session/providers/google';
+// import { makeRedirectUri, useAuthRequest } from 'expo-auth-session';
+// import { getAuth, GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
+
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
@@ -110,12 +20,44 @@ export default function SignIn() {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const auth = FIREBASE_AUTH;
 
+  // //google sign-in feature
+
+  // const [request, response, promptAsync] = useAuthRequest(
+  //   {
+  //     clientId: process.env.GOOGLE_CLIENT_ID || '210251895499-cbk4n7u5glc8hir1aoe07kc9l2lmhlqg.apps.googleusercontent.com',
+  //     redirectUri: makeRedirectUri({
+  //       // native: 'seas-the-day://redirect',
+  //       useProxy: true,
+  //     }),
+  //     scopes: ['profile', 'email'],
+  //   },
+  //   Google.discovery
+  // );
+
+  // useEffect(() => {
+  //   if (response?.type === 'success') {
+  //     const { id_token } = response.params;
+  //     const credential = GoogleAuthProvider.credential(id_token);
+  //     signInWithCredential(auth, credential)
+  //       .then((userCredential) => {
+  //         console.log(userCredential);
+  //         router.replace('/home');
+  //       })
+  //       .catch((error) => {
+  //         console.error(error);
+  //         setErrorMessage(error.message);
+  //         setIsPopupVisible(true);
+  //       });
+  //   }
+  // }, [response]);
+
   const signIn = async () => {
     setLoading(true);
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
       console.log(response);
-      router.replace('/home');
+      const userId = response.user.uid;
+      router.replace('/home', { currentUserId: userId });
     } catch (error) {
       console.log(error);
       setErrorMessage(error.message);
@@ -143,6 +85,9 @@ export default function SignIn() {
                 handlePress={signIn}
                 containerStyles={styles.buttonContainer} 
               />
+              {/* <TouchableOpacity onPress={() => promptAsync()}>
+                <Text style={styles.googleSignInText}>Sign in with Google</Text>
+              </TouchableOpacity> */}
               <View style={styles.footer}>
                 <Text style={styles.footerText}>Don't have an account?</Text>
                 <Link href="/sign-up" style={styles.link}>Sign up</Link>
@@ -204,9 +149,16 @@ const styles = StyleSheet.create({
   },
   link: {
     fontSize: 14,
-    color: '#FFFFFF', // Adjust the color to match 'text-white'
+    color: '#FFFFFF', 
     fontFamily: 'PlayfairDisplay', 
+  },
+  googleSignInText: {
+    fontSize: 16,
+    color: '#4285F4',
+    textAlign: 'center',
+    marginVertical: 10,
+    top: 20,
+    fontFamily: 'PlayfairDisplay',
   },
 });
 
-//export default SignIn;
