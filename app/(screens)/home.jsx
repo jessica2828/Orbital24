@@ -15,26 +15,7 @@ import { FIRESTORE_DB } from '@/src/FirebaseConfig';
 
 
 export default function Home({ navigation }) {
-  // const [sound, setSound] = useState();
 
-  // const playSound = async () => {
-  //   const { sound } = await Audio.Sound.createAsync(
-  //      require('../../assets/music/home.mp3') 
-  //   );
-  //   setSound(sound);
-  //   await sound.playAsync();
-  // }
-
-  // useEffect(() => {
-  //   playSound();
-
-  //   return () => {
-  //     if (sound) {
-  //       sound.stopAsync();
-  //       sound.unloadAsync();
-  //     }
-  //   }
-  // }, []);
   const [pearlCurrency, setPearlCurrency] = useState(0);
   const [shellCurrency, setShellCurrency] = useState(0);
 
