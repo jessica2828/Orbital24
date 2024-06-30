@@ -6,7 +6,7 @@ import { Link, Redirect, router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import HomeButton from '@/components/HomeButton';
 import BackButton from '@/components/BackButton';
-import Currency from './currency';
+import Currency from '@/components/currency';
 import { useFocusEffect } from '@react-navigation/native';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';

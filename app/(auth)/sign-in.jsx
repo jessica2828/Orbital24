@@ -6,7 +6,7 @@ import { ActivityIndicator } from 'react-native-paper';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import CustomButton from '@/components/CustomButton';
 import BackButton from '@/components/BackButton';
-import NotificationPopup from '@/components/NotificationPopup';
+import AlertPopup from '@/components/AlertPopup';
 // import * as Google from 'expo-auth-session/providers/google';
 // import { makeRedirectUri, useAuthRequest } from 'expo-auth-session';
 // import { getAuth, GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
@@ -52,20 +52,30 @@ export default function SignIn() {
   // }, [response]);
 
   const signIn = async () => {
+    if (!email || !password) {
+      setErrorMessage('Please fill in all fields.');
+      setIsPopupVisible(true);
+      return;
+    }
+
     setLoading(true);
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
       console.log(response);
       const userId = response.user.uid;
-      router.replace('/home', { currentUserId: userId });
+      router.push('/home', { currentUserId: userId });
     } catch (error) {
       console.log(error);
-      setErrorMessage(error.message);
+      setErrorMessage('Please check your email or password.');
       setIsPopupVisible(true);
     } finally {
       setLoading(false);
     }
-  }
+  };
+
+  const closePopup = () => {
+    setIsPopupVisible(false);
+  };
 
   return (
     <ImageBackground source={require('../../assets/images/indoor.png')} style={styles.backgroundImage}>
@@ -97,6 +107,12 @@ export default function SignIn() {
         </KeyboardAvoidingView>
       </View>
       <BackButton />
+      <AlertPopup
+        visible={isPopupVisible}
+        message={errorMessage}
+        onClose={closePopup}
+        closeText="OK"
+      />
     </ImageBackground>
   );
 };

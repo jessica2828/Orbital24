@@ -3,7 +3,7 @@ import { View, Text, ScrollView, TouchableOpacity, Image, StyleSheet, Modal, But
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
 import BackButton from '@/components/BackButton'; 
-import Currency from './currency'; 
+import Currency from '../../components/currency'; 
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { FIRESTORE_DB } from '@/src/FirebaseConfig';
@@ -25,29 +25,49 @@ const Shop = () => {
     if (userSnapshot.exists()) {
       setPearls(userSnapshot.data().pearlCurrency || 0);
       setShells(userSnapshot.data().shellCurrency || 0);
+      setPurchasedItems(userSnapshot.data().purchasedItems || []);
     }
   };
 
-  useEffect(() => {
-    const loadPurchasedItems = async () => {
-      try {
-        const storedPurchasedItems = await AsyncStorage.getItem('purchasedItems');
-        if (storedPurchasedItems) {
-          setPurchasedItems(JSON.parse(storedPurchasedItems));
-        }
-      } catch (error) {
-        console.error('Failed to load purchased items', error);
-      }
-    };
+  // useEffect(() => {
+  //   const loadPurchasedItems = async () => {
+  //     try {
+  //       const storedPurchasedItems = await AsyncStorage.getItem('purchasedItems');
+  //       if (storedPurchasedItems) {
+  //         setPurchasedItems(JSON.parse(storedPurchasedItems));
+  //       }
+  //     } catch (error) {
+  //       console.error('Failed to load purchased items', error);
+  //     }
+  //   };
 
+  //   const auth = getAuth();
+  //   const unsubscribe = onAuthStateChanged(auth, async (user) => {
+  //     if (user) {
+  //       fetchCurrency(user);
+  //       loadPurchasedItems();
+  //     } else {
+  //       setPearls(0);
+  //       setShells(0);
+  //     }
+  //   });
+
+  //   return () => {
+  //     if (unsubscribe) {
+  //       unsubscribe();
+  //     }
+  //   };
+  // }, []);
+
+  useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         fetchCurrency(user);
-        loadPurchasedItems();
       } else {
         setPearls(0);
         setShells(0);
+        setPurchasedItems([]);
       }
     });
 
@@ -57,6 +77,7 @@ const Shop = () => {
       }
     };
   }, []);
+
 
   const handleItemPress = (item) => {
     setSelectedItem(item);
@@ -134,8 +155,9 @@ const styles = StyleSheet.create({
     marginTop: 100,
   },
   headerText: {
-    fontSize: 50,
+    fontSize: 45,
     fontWeight: 'bold',
+    fontFamily: 'PlayfairDisplay',
     color: 'white',
   },
   scrollView: {
@@ -160,6 +182,7 @@ const styles = StyleSheet.create({
   itemName: {
     fontSize: 18,
     fontWeight: 'bold',
+    fontFamily: 'PlayfairDisplay',
   },
   priceButton: {
     flexDirection: 'row',
@@ -178,10 +201,12 @@ const styles = StyleSheet.create({
   priceText: {
     fontSize: 16,
     fontWeight: 'bold',
+    fontFamily: 'PlayfairDisplay',
   },
   soldOutText: {
     fontSize: 16,
     fontWeight: 'bold',
+    fontFamily: 'PlayfairDisplay',
     color: 'red',
     marginTop: 10,
   },

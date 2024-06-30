@@ -7,6 +7,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { setDoc, doc } from 'firebase/firestore';
 import CustomButton from '@/components/CustomButton';
 import BackButton from '@/components/BackButton';
+import AlertPopup from '@/components/AlertPopup';
 
 export default function SignUp() {
   const [name, setName] = useState('');
@@ -14,12 +15,15 @@ export default function SignUp() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
   const auth = FIREBASE_AUTH;
   const db = FIRESTORE_DB;
 
   const signUp = async () => {
     if (password !== confirmPassword) {
-      alert('Passwords do not match!');
+      setMessage('Password do not match!');
+      setIsPopupVisible(true);
       return;
     }
 
@@ -35,15 +39,22 @@ export default function SignUp() {
       });
 
       console.log(response);
-      alert('Sign up successful!');
+      setMessage('Sign up successful!');
+      setIsPopupVisible(true);
       router.replace('/sign-in');
     } catch (error) {
       console.log(error);
-      alert('Sign up failed: ' + error.message)
+      setMessage('Sign up failed: ' + error.message);
+      setIsPopupVisible(true);
     } finally {
       setLoading(false);
     }
   };
+
+  const closePopup = () => {
+    setIsPopupVisible(false);
+  };
+
 
   return (
     <ImageBackground source={require('../../assets/images/indoor.png')} style={styles.backgroundImage}>
@@ -98,6 +109,12 @@ export default function SignUp() {
         </KeyboardAvoidingView>
       </View>
       <BackButton />
+      <AlertPopup
+        visible={isPopupVisible}
+        message={message}
+        onClose={closePopup}
+        closeText="OK"
+      />
     </ImageBackground>
   );
 };

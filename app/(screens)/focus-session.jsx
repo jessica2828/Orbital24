@@ -7,7 +7,7 @@ import { doc, getDoc, setDoc, updateDoc, collection, addDoc } from 'firebase/fir
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { Audio } from 'expo-av';
 import SoundPicker from '@/components/SoundPicker';
-import Currency from './currency';
+import Currency from '../../components/currency';
 import BackButton from '@/components/BackButton';
 import { router } from 'expo-router';
 

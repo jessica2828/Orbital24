@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import HomeButton from '@/components/HomeButton';
 import { useSpring, animated } from '@react-spring/native';
 //import { fadeTransition } from './CustomTransitionConfig'; 
-import Currency from './currency';
+import Currency from '../../components/currency';
 import { useFocusEffect } from '@react-navigation/native';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
       flex: 2/5,
       top: 30,
       //bottom: 200,
-      left: 235,
+      left: 280,
       //right: 20
       width: '10%'
     },

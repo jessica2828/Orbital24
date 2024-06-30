@@ -198,8 +198,9 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: 40,
-    fontSize: 40,
+    fontSize: 35,
     fontWeight: 'bold',
+    fontFamily: 'PlayfairDisplay',
     color: '#fff',
     marginBottom: 40,
   },
@@ -219,7 +220,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   companionName: {
-    fontSize: 30,
+    fontSize: 25,
+    fontFamily: 'PlayfairDisplay',
     color: '#fff',
   },
   modalContainer: {

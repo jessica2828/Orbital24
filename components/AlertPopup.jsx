@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Modal } from 'react-native';
-import Animated, { Easing } from 'react-native-reanimated';
 
-const {width, height } = Dimensions.get('window');
-const { Value, timing } = Animated;
+const { width, height } = Dimensions.get('window');
 
 export default class NotificationPopup extends Component {
   render() {
-    const { visible, message, onClose, closeText, onAction, actionText } = this.props;
+    const { visible, message, onClose, closeText } = this.props;
     return (
       <Modal
-      animationType="fade"
-      transparent={true}
-      visible={visible}
-      onRequestClose={onClose}
+        animationType="fade"
+        transparent={true}
+        visible={visible}
+        onRequestClose={onClose}
       >
         <View style={styles.container}>
           <View style={styles.popup}>
@@ -21,9 +19,6 @@ export default class NotificationPopup extends Component {
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.notifButton} onPress={onClose}>
                 <Text style={styles.notifButtonText}>{closeText}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.notifButton} onPress={onAction}>
-                <Text style={styles.notifButtonText}>{actionText}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -48,37 +43,34 @@ const styles = StyleSheet.create({
   },
   popup: {
     flex: 1,
-    //flexDirection: 'row',
     backgroundColor: 'rgba(144, 205, 248, 0.8)',
-    padding: 40,
+    padding: 20,
     borderRadius: 8,
     alignItems: 'center',
+    marginLeft: 30,
+    marginRight: 30,
   },
   message: {
     fontSize: 15,
-    fontFamily:'PlayfairDisplay',
+    fontFamily: 'PlayfairDisplay',
     marginBottom: 10,
     textAlign: 'center',
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly', 
+    justifyContent: 'center',
     width: '100%',
     marginTop: 10,
   },
   notifButton: {
-    flex: 1,
     marginHorizontal: 10,
-    //marginBottom: 10,
-    //paddingVertical: 2,
-    //paddingHorizontal: 5,
     padding: 8,
     backgroundColor: '#0967a8',
     borderRadius: 5,
     alignItems: 'center',
   },
   notifButtonText: {
-    fontFamily:'PlayfairDisplay',
+    fontFamily: 'PlayfairDisplay',
     fontSize: 14,
     color: 'white',
     textAlign: 'center',
