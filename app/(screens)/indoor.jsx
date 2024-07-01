@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     containerFocusSession: {
         flex: 1,
         //alignContent: 'center',
-        top: 0,
+        top: 100,
         left: 90,
         bottom: 100,
         width: '70%',
@@ -110,13 +110,13 @@ const styles = StyleSheet.create({
         top: 220,
         //bottom: 10,
         width: '20%',
-        left: 250,
+        left: 220,
     },
     containerOverview: {
       flex: 1,
       top: 100,
       width: '40%',
-      left: 250,
+      left: 200,
     },
     text: {
         fontSize: 24,

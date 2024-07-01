@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     },
     containerPond: {
       flex: 1,
-      top: 70,
+      top: 60,
       //bottom: 50,
       left: 150,
       //right: 100
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
       flex: 2/5,
       top: 30,
       //bottom: 200,
-      left: 280,
+      left: 230,
       //right: 20
       width: '10%'
     },
