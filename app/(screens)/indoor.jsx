@@ -71,7 +71,13 @@ export default function Indoor() {
                         containerStyles="w-3/5 mt-14" 
                     /> 
                     <StatusBar style="light" />
-                    
+                </View>
+                <View style={styles.containerOverview}>
+                    <HomeButton
+                      title="Overview"
+                      handlePress={() => router.push('/overview')}
+                      containerStyles="w-3/5 mt-14"
+                    />
                 </View>
                 <BackButton />
             </ImageBackground>
@@ -105,6 +111,12 @@ const styles = StyleSheet.create({
         //bottom: 10,
         width: '20%',
         left: 250,
+    },
+    containerOverview: {
+      flex: 1,
+      top: 100,
+      width: '40%',
+      left: 250,
     },
     text: {
         fontSize: 24,

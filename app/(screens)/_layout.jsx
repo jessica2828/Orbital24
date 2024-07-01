@@ -62,6 +62,12 @@ const ScreensLayout = () => {
             headerShown: false
           }}
         />
+        <Stack.Screen
+          name="overview"
+          options={{
+            headerShown: false
+          }}
+        />
       </Stack>
 
       <StatusBar backgroundColor='black' style='light' />
