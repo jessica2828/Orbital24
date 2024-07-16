@@ -32,7 +32,7 @@ const createArray = (start, end)=> {
   return arr;
 };
 
-const AVAILABLE_MINUTES = createArray(10, 120);
+const AVAILABLE_MINUTES = createArray(1, 120);
 
 export default class FocusSessionScreen extends Component {
   constructor(props) {
@@ -172,20 +172,6 @@ export default class FocusSessionScreen extends Component {
   //     elapsedTime: 0,
   //   });
   //   this.showNotification();
-  // };
-
-  // stop = async () => {
-  //   clearInterval(this.interval);
-  //   this.interval = null;
-  //   await this.recordTimeElapsed();
-  //   this.stopSound();
-  //   this.setState({
-  //     remainingSeconds: 0,
-  //     isRunning: false,
-  //     startTime: null,
-  //     elapsedTime: 0,
-  //   });
-  //   this.showNotification();
   // }; 
 
   stop = async () => {
@@ -242,6 +228,7 @@ export default class FocusSessionScreen extends Component {
     const { elapsedTime, initShell, pearlCurrency, shellCurrency } = this.state;
     const duration = elapsedTime / 1000 / 60; 
     const earnedShells = shellCurrency - initShell;
+    this.stopSound();
     router.push({ pathname: "/end-focus-session", params: { duration, earnedShells }});
   };
 

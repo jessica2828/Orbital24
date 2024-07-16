@@ -3,7 +3,13 @@
     "name": "Seas-The-Day",
     "slug": "seas-the-day",
     "extra": {
-      "googleClientId": "210251895499-cbk4n7u5glc8hir1aoe07kc9l2lmhlqg.apps.googleusercontent.com"
+      "googleClientId": "210251895499-cbk4n7u5glc8hir1aoe07kc9l2lmhlqg.apps.googleusercontent.com",
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "98a42527-9fcf-4bda-8f0e-25427f768c57"
+      }
     },
     "scheme": "seas-the-day",
     "version": "1.0.0",
@@ -20,13 +26,15 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.jessica2828.seastheday"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.jessica2828.seastheday"
     },
     "web": {
       "bundler": "metro",

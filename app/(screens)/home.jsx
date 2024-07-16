@@ -37,6 +37,15 @@ export default function Home({ navigation }) {
   //     }
   //   }
   // }, []);
+
+  // stopSound = async () => {
+  //   if (this.state.sound) {
+  //     await this.state.sound.stopAsync();
+  //     await this.state.sound.unloadAsync();
+  //     this.setState({ sound: null });
+  //   }
+  // };
+
   const [pearlCurrency, setPearlCurrency] = useState(0);
   const [shellCurrency, setShellCurrency] = useState(0);
   const [currentUserId, setCurrentUserId] = useState(null);
