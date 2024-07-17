@@ -32,7 +32,7 @@ const createArray = (start, end)=> {
   return arr;
 };
 
-const AVAILABLE_MINUTES = createArray(1, 120);
+const AVAILABLE_MINUTES = createArray(10, 120);
 
 export default class FocusSessionScreen extends Component {
   constructor(props) {
@@ -194,29 +194,38 @@ export default class FocusSessionScreen extends Component {
     
   };
 
+
   recordTimeElapsed = async () => {
     const auth = getAuth();
     const user = auth.currentUser;
     if (user) {
-      const { startTime } = this.state;
+      const { startTime, elapsedTime } = this.state;
       if (startTime) {
-        const elapsedTime = Date.now() - startTime;
+        const sessionData = {
+          startTime: new Date(startTime),
+          elapsedTime: elapsedTime / 1000, 
+        };
         try {
-          const docRef = await addDoc(collection(FIRESTORE_DB, 'sessions'), {
-            uid: user.uid,
-            startTime: new Date(startTime),
-            elapsedTime: elapsedTime / 1000,
-          });
-          console.log('Elapsed time saved to Firestore with ID:', docRef.id);
+          const userDoc = doc(FIRESTORE_DB, 'users', user.uid);
+          const userSnapshot = await getDoc(userDoc);
+          if (userSnapshot.exists()) {
+            await updateDoc(userDoc, {
+              sessions: userSnapshot.data().sessions
+                ? [...userSnapshot.data().sessions, sessionData]
+                : [sessionData],
+            });
+          } else {
+            await setDoc(userDoc, { sessions: [sessionData] });
+          }
+          console.log('Elapsed time saved to Firestore for user:', user.uid);
         } catch (error) {
-          console.error('Error adding document:', error);
+          console.error('Error updating document:', error);
         }
-        console.log(`Elapsed time: ${elapsedTime / 1000} seconds`);
       }
     } else {
-      console.error('No user is signed in: sign in to save your record!');
+      console.error('No user is signed in');
     }
-  };
+  };  
 
   // showNotification = () => {
   //   console.log("Session ended, focus time recorded.");
