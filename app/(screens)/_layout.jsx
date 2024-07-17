@@ -23,49 +23,64 @@ const ScreensLayout = () => {
         <Stack.Screen
           name="home"
           options={{
-            headerShown: false
+            headerShown: false,
+            animation: 'fade_from_bottom'
           }}
         />
         <Stack.Screen
           name="indoor"
           options={{
-            headerShown: false
+            headerShown: false,
+            animation: 'fade_from_bottom'
           }}
         />
         <Stack.Screen
           name="friends"
           options={{
-            headerShown: false
+            headerShown: false,
+            animation: 'fade_from_bottom'
           }}
         />
         <Stack.Screen
           name="pond"
           options={{
-            headerShown: false
+            headerShown: false,
+            animation: 'fade_from_bottom'
           }}
         />
         <Stack.Screen
           name="shop"
           options={{
-            headerShown: false
+            headerShown: false,
+            animation: 'fade_from_bottom'
           }}
         />
         <Stack.Screen
           name="focus-session"
           options={{
-            headerShown: false
+            headerShown: false,
+            animation: 'fade'
           }}
         />
         <Stack.Screen
           name="end-focus-session"
           options={{
-            headerShown: false
+            headerShown: false,
+            animation: 'fade'
           }}
         />
         <Stack.Screen
           name="overview"
           options={{
-            headerShown: false
+            headerShown: false,
+            animation: 'fade_from_bottom'
+          }}
+        />
+        <Stack.Screen
+          name="gallery"
+          options={{
+            headerShown: false,
+            animation: 'fade_from_bottom'
           }}
         />
       </Stack>

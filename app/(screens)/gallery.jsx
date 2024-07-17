@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { Image, ImageBackground, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Link, Redirect, router } from 'expo-router';
 import CustomButton from '@/components/CustomButton';
+import BackButton from '@/components/BackButton';
 
 export default function App() {
     return (
@@ -11,6 +12,7 @@ export default function App() {
                     <StatusBar style="light" />
                 </View>
             </ImageBackground>
+            <BackButton />
         </ScrollView>
     );
 }

@@ -353,7 +353,7 @@ export default class FocusSessionScreen extends Component {
             onClose={this.closeSoundPicker}
             onSelect={this.selectSound}
           />
-          <BackButton />
+          {!this.state.isRunning && <BackButton />}
         </View>
       </ImageBackground>
     );
