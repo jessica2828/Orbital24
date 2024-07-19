@@ -73,14 +73,14 @@ const ScreensLayout = () => {
           name="overview"
           options={{
             headerShown: false,
-            animation: 'fade_from_bottom'
+            animation: 'fade'
           }}
         />
         <Stack.Screen
           name="gallery"
           options={{
             headerShown: false,
-            animation: 'fade_from_bottom'
+            animation: 'fade'
           }}
         />
       </Stack>

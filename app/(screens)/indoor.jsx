@@ -54,34 +54,32 @@ export default function Indoor() {
     );
   
     return (
-        <ScrollView contentContainerStyle={{ height: '100%'}}>
-            <ImageBackground source={ require('../../assets/images/indoor.png')} style={styles.backgroundImage}>
-                <Currency pearl={pearlCurrency} shell={shellCurrency} />
-                <View style={styles.containerGallery}>
-                    <HomeButton 
-                        title="Gallery" 
-                        handlePress={() => router.push('/gallery')}
-                        containerStyles="w-3/5 mt-14" 
-                    /> 
-                </View>
-                <View style={styles.containerFocusSession}>
-                    <HomeButton 
-                        title="Start Focus Session" 
-                        handlePress={() => router.push('/focus-session')}
-                        containerStyles="w-3/5 mt-14" 
-                    /> 
-                    <StatusBar style="light" />
-                </View>
-                <View style={styles.containerOverview}>
-                    <HomeButton
-                      title="Overview"
-                      handlePress={() => router.push('/overview')}
-                      containerStyles="w-3/5 mt-14"
-                    />
-                </View>
-                <BackButton />
-            </ImageBackground>
-        </ScrollView>
+      <ImageBackground source={ require('../../assets/images/indoor.png')} style={styles.backgroundImage}>
+          <Currency pearl={pearlCurrency} shell={shellCurrency} />
+          <View style={styles.containerGallery}>
+              <HomeButton 
+                  title="Gallery" 
+                  handlePress={() => router.push('/gallery')}
+                  containerStyles="w-3/5 mt-14" 
+              /> 
+          </View>
+          <View style={styles.containerFocusSession}>
+              <HomeButton 
+                  title="Start Focus Session" 
+                  handlePress={() => router.push('/focus-session')}
+                  containerStyles="w-3/5 mt-14" 
+              /> 
+              <StatusBar style="light" />
+          </View>
+          <View style={styles.containerOverview}>
+              <HomeButton
+                title="Overview"
+                handlePress={() => router.push('/overview')}
+                containerStyles="w-3/5 mt-14"
+              />
+          </View>
+          <BackButton />
+      </ImageBackground>
     );
 }
 

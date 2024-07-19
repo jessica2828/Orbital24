@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     marginBottom: 20,
-    marginLeft: 18,
+    marginLeft: 0,
   },
   addButtonText: {
     color: '#fff',
