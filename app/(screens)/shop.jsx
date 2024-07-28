@@ -29,36 +29,6 @@ const Shop = () => {
     }
   };
 
-  // useEffect(() => {
-  //   const loadPurchasedItems = async () => {
-  //     try {
-  //       const storedPurchasedItems = await AsyncStorage.getItem('purchasedItems');
-  //       if (storedPurchasedItems) {
-  //         setPurchasedItems(JSON.parse(storedPurchasedItems));
-  //       }
-  //     } catch (error) {
-  //       console.error('Failed to load purchased items', error);
-  //     }
-  //   };
-
-  //   const auth = getAuth();
-  //   const unsubscribe = onAuthStateChanged(auth, async (user) => {
-  //     if (user) {
-  //       fetchCurrency(user);
-  //       loadPurchasedItems();
-  //     } else {
-  //       setPearls(0);
-  //       setShells(0);
-  //     }
-  //   });
-
-  //   return () => {
-  //     if (unsubscribe) {
-  //       unsubscribe();
-  //     }
-  //   };
-  // }, []);
-
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, async (user) => {

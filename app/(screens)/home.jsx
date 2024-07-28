@@ -9,6 +9,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc, updateDoc, arrayUnion, onSnapshot, arrayRemove } from 'firebase/firestore';
 import { FIRESTORE_DB } from '@/src/FirebaseConfig';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
+import Tutorial from '../../components/Tutorial';
 
 
 export default function Home({ navigation }) {
@@ -16,6 +17,7 @@ export default function Home({ navigation }) {
   const [pearlCurrency, setPearlCurrency] = useState(0);
   const [shellCurrency, setShellCurrency] = useState(0);
   const [currentUserId, setCurrentUserId] = useState(null);
+  const [showTutorial, setShowTutorial] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [invitationDetails, setInvitationDetails] = useState(null);
 
@@ -25,6 +27,11 @@ export default function Home({ navigation }) {
       if (user) {
         setCurrentUserId(user.uid);
         fetchCurrency(user);
+        const userDoc = doc(FIRESTORE_DB, 'users', user.uid);
+        const userSnapshot = await getDoc(userDoc);
+        if (userSnapshot.exists() && !userSnapshot.data().hasCompletedTutorial) {
+          setShowTutorial(true);
+        }
         fetchInvitations(user.uid);
       } else {
         setCurrentUserId(null);
@@ -63,6 +70,10 @@ export default function Home({ navigation }) {
       }
     }, [])
   );
+
+  const handleTutorialComplete = () => {
+    setShowTutorial(false);
+  };
 
   const fetchCurrency = async (user) => {
     const userDoc = doc(FIRESTORE_DB, 'users', user.uid);
@@ -255,8 +266,6 @@ export default function Home({ navigation }) {
   //   }
   // };
   
-
-  
   const handleDeclineInvitation = async () => {
     const currentUser = getAuth().currentUser;
     if (!currentUser) {
@@ -358,92 +367,63 @@ export default function Home({ navigation }) {
           </View>
         </Modal>
       </View>
+      {showTutorial && <Tutorial onComplete={handleTutorialComplete} />}
     </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-    backgroundImage: {
-        flex: 1,
-        resizeMode: 'cover',
-        justifyContent:  'center', 
-        width: '100%',
-        height: '100%',
-    },
-    container: {
-      flex: 1,
-      top: 10,
-      justifyContent: 'center',
-      alignItems: 'left',
-    },
-    containerCurrency: {
-        // flex: 1/5,
-        // top: 25,
-        flexDirection: 'row',
-        flex: 1/5,
-        marginTop: 80,
-        marginBottom: 0,
-        //marginRight: 120,
-        marginLeft: 10
-        //backgroundColor: 'rgba(255, 255, 255, 0.5)', 
-    },
-    currencyImage: {
-      width: 40,
-      height: 40,
-      marginRight: 10,
-    },
-    inviteIcon: {
-      width: 70,
-      height: 70,
-      marginLeft: 350,
-      marginTop: getStatusBarHeight() + 70,
-    },
-    containerRoom: {
-        flex: 1/5,
-        marginTop: 150,
-        marginBottom: 0,
-        //marginRight: 120,
-        marginLeft: 10,
-        //backgroundColor: 'rgba(255, 255, 255, 0.5)', 
-        width: '30%'
-    },
-    containerShop: {
-      flex: 1,
-      top: 90,
-      bottom: 0,
-      left: 50,
-      width: '30%'
-    },
-    containerPond: {
-      flex: 1,
-      top: 60,
-      //bottom: 50,
-      left: 150,
-      //right: 100
-      width: '30%'
-    },
-    containerFriends: {
-      flex: 2/5,
-      top: 30,
-      //bottom: 200,
-      left: 230,
-      //right: 20
-      width: '10%'
-    },
-    text: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: 'black',
-        fontFamily: 'PlayfairDisplay',
-    },
-    link: {
-      color: 'blue',
-      marginTop: 6,
-    },
-    buttonText: {
-      color: 'black',
-      fontFamily: 'PlayfairDisplay',
-    },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+  },
+  container: {
+    flex: 1,
+    top: 10,
+    justifyContent: 'center',
+    alignItems: 'left',
+  },
+  containerRoom: {
+    flex: 1 / 5,
+    marginTop: 200,
+    marginBottom: 0,
+    marginLeft: 10,
+    width: '30%',
+  },
+  containerShop: {
+    flex: 1,
+    top: 90,
+    bottom: 0,
+    left: 50,
+    width: '30%',
+  },
+  containerPond: {
+    flex: 1,
+    top: 60,
+    left: 150,
+    width: '30%',
+  },
+  containerFriends: {
+    flex: 2 / 5,
+    top: 30,
+    left: 230,
+    width: '10%',
+  },
+  text: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: 'black',
+  },
+  link: {
+    color: 'blue',
+    marginTop: 6,
+  },
+  buttonText: {
+    color: 'black',
+  },
     modalContainer: {
       flex: 1,
       justifyContent: 'center',
