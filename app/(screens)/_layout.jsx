@@ -83,6 +83,13 @@ const ScreensLayout = () => {
             animation: 'fade'
           }}
         />
+        <Stack.Screen
+          name="waitingroom"
+          options={{
+            headerShown: false,
+            animation: 'fade'
+          }}
+        />
       </Stack>
 
       <StatusBar backgroundColor='black' style='light' />

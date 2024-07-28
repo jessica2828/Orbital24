@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import { getStatusBarHeight } from 'react-native-status-bar-height'
-import { Link, useNavigation, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 
 const BackButton = ({goBack}) => {
   const router = useRouter();

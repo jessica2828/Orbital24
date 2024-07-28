@@ -81,24 +81,7 @@ const OverviewPage = () => {
     } catch (error) {
       console.error('Error fetching sessions:', error);
     }
-  };
-
-  // const getChartData = () => {
-  //   const hours = Array(24).fill(0);
-  //   focusSessions.forEach(session => {
-  //     const sessionHour = new Date(session.startTime.seconds * 1000).getHours();
-  //     hours[sessionHour] += session.elapsedTime;
-  //   });
-  
-  //   return {
-  //     labels: Array.from({ length: 25 }, (_, i) => (i % 3 === 0 ? i.toString().padStart(2, '0') + '.00' : '')),
-  //     datasets: [
-  //       {
-  //         data: hours.map(time => Math.round(time / 60)),
-  //       },
-  //     ],
-  //   };
-  // };
+  }
 
   const getChartData = () => {
     if (viewMode === 'daily') {
@@ -129,69 +112,47 @@ const OverviewPage = () => {
           {
             data: days.map(time => Math.round(time / 60)),
           },
-        ],
+        ], 
       };
     }
   };
   
-//   return (
-//     <ImageBackground source={require('@/assets/images/indoor.png')} style={styles.backgroundImage}>
-//       <View style={styles.overlay} />
-//       <View style={styles.container}>
-//         <Text style={styles.title}>Focus Session Overview</Text>
-//         <View style={styles.datePickerContainer}>
-//           <Text style={styles.datePickerLabel}>Select Date:</Text>
-//           <DateTimePicker
-//             value={selectedDate}
-//             mode="date"
-//             display="default"
-//             onChange={(event, date) => {
-//               if (date) {
-//                 setSelectedDate(date);
-//               }
-//             }}
-//             textColor="white" 
-//             themeVariant="dark" 
-//             style={styles.datePicker}
-//           />
-//         </View>
-//         <Text style={styles.totalDuration}>Total Duration: {totalDuration} minutes</Text>
-//         <ScrollView>
-//           <BarChart
-//             data={getChartData()}
-//             width={Dimensions.get('window').width - 60}
-//             height={190}
-//             yAxisLabel=""
-//             yAxisSuffix="min"
-//             chartConfig={{
-//               backgroundColor: 'white',
-//               backgroundGradientFrom: '#0d0d0d',
-//               backgroundGradientTo: '#0d0d0d',
-//               decimalPlaces: 0, 
-//               color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-//               labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-//               style: {
-//                 borderRadius: 16,
-//               },
-//               propsForDots: {
-//                 r: '6',
-//                 strokeWidth: '1',
-//                 stroke: '#0d0d0d',
-//               },
-//             }}
-//             style={{
-//               marginVertical: 10,
-//               paddingLeft: 10,
-//               paddingRight: 55,
-//               borderRadius: 8,
-//             }}
-//           />
-//         </ScrollView>
-//         <BackButton />
-//       </View>
-//     </ImageBackground>
-//   );
-// };
+
+  // const getChartData = () => {
+  //   if (viewMode === 'daily') {
+  //     const hours = Array(24).fill(0);
+  //     focusSessions.forEach(session => {
+  //       const sessionHour = new Date(session.startTime.seconds * 1000).getHours();
+  //       hours[sessionHour] += session.elapsedTime;
+  //     });
+  //     return {
+  //       labels: Array.from({ length: 24 }, (_, i) => (i % 3 === 0 ? i.toString() : '')),
+  //       datasets: [
+  //         {
+  //           data: hours.map(time => Math.round(time / 60)),
+  //         },
+  //       ],
+  //     };
+  //   } else {
+  //     const days = Array(7).fill(0);
+  //     const start = startOfWeek(selectedDate, { weekStartsOn: 1 });
+  //     focusSessions.forEach(session => {
+  //       const sessionDate = session.startTime.toDate();
+  //       const dayIndex = (sessionDate.getDay() + 6) % 7;
+  //       days[dayIndex] += session.elapsedTime;
+  //     });
+  //     return {
+  //       labels: Array.from({ length: 7 }, (_, i) => format(addDays(start, i), 'E')),
+  //       datasets: [
+  //         {
+  //           data: days.map(time => Math.round(time / 60)),
+  //         },
+  //       ],
+  //     };
+  //   }
+  // };
+  
+
 
 return (
   <ImageBackground source={require('@/assets/images/indoor.png')} style={styles.backgroundImage}>
@@ -207,26 +168,32 @@ return (
         </TouchableOpacity>
       </View>
       <View style={styles.datePickerContainer}>
-          <Text style={styles.datePickerLabel}>Select {viewMode === 'daily' ? 'Date' : 'Week Starting From'}: </Text>
-          <DateTimePicker
-            value={selectedDate}
-            mode="date"
-            display="default"
-            onChange={(event, date) => {
-              if (date) {
-                setSelectedDate(date);
-              }
-            }}
-            textColor="white" 
-            themeVariant="dark" 
-          />
+          <Text style={styles.datePickerLabel}>{viewMode === 'daily' ? 'Select Date' : 'Week From'}: </Text>
+          <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+            <Text style={styles.datePickerText}>{format(selectedDate, 'PPP')}</Text>
+          </TouchableOpacity>
+          {showDatePicker && (
+            <DateTimePicker
+              value={selectedDate}
+              mode="date"
+              display="default"
+              onChange={(event, date) => {
+                setShowDatePicker(false);
+                if (date) {
+                  setSelectedDate(date);
+                }
+              }}
+              textColor="white" 
+              themeVariant="dark" 
+            />
+          )}
         </View>
       <Text style={styles.totalDuration}>Total Duration: {totalDuration} minutes</Text>
       <ScrollView>
         <BarChart
           data={getChartData()}
-          width={Dimensions.get('window').width - 60}
-          height={190}
+          width={Dimensions.get('window').width - 45 }
+          height={250}
           yAxisLabel=""
           yAxisSuffix="min"
           chartConfig={{
@@ -247,8 +214,8 @@ return (
           }}
           style={{
             marginVertical: 10,
-            paddingLeft: 10,
-            paddingRight: 55,
+            paddingLeft: 0,
+            paddingRight: 50,
             borderRadius: 8,
           }}
         />
@@ -275,7 +242,6 @@ overlay: {
 },
 title: {
   fontSize: 28,
-  fontWeight: 'bold',
   fontFamily: 'PlayfairDisplay',
   marginBottom: 20,
   textAlign: 'center',
@@ -313,6 +279,12 @@ datePickerLabel: {
   justifyContent: 'center',
   alignItems: 'center',
   marginRight: 10,
+},
+datePickerText: {
+  fontSize: 18,
+  color: 'white',
+  fontFamily: 'PlayfairDisplay',
+  textDecorationLine: 'underline',
 },
 totalDuration: {
   fontSize: 17,
