@@ -51,9 +51,13 @@ import { FIRESTORE_DB } from '@/src/FirebaseConfig';
 import BackButton from '@/components/BackButton';
 
 const companionsData = [
-  { id: 1, name: 'Companion 1', image: require('../../assets/images/companion_1.png'), costumes: { default: require('../../assets/images/companion_1.png'), grass_skirt: require('../../assets/images/c1_grass.png'), goggles: require('../../assets/images/c1_goggles.png') } },
-  { id: 2, name: 'Companion 2', image: require('../../assets/images/companion_2.png'), costumes: { default: require('../../assets/images/companion_2.png'), grass_skirt: require('../../assets/images/c2_grass.png'), goggles: require('../../assets/images/c2_goggles.png') } },
-  { id: 3, name: 'Companion 3', image: require('../../assets/images/companion_3.png'), costumes: { default: require('../../assets/images/companion_3.png'), grass_skirt: require('../../assets/images/c3_grass.png'), goggles: require('../../assets/images/c3_goggles.png') } },
+  { id: 1, name: 'Orange Loaf', image: require('../../assets/images/c1.png'), costumes: { default: require('../../assets/images/c1.png'), grass_skirt: require('../../assets/images/c1_grass.png'), goggles: require('../../assets/images/c1_gog.png') } },
+  { id: 2, name: 'Gray Loaf', image: require('../../assets/images/c2.png'), costumes: { default: require('../../assets/images/c2.png'), grass_skirt: require('../../assets/images/c2_grass.png'), goggles: require('../../assets/images/c2_gog.png') } },
+  { id: 3, name: 'Blue Loaf', image: require('../../assets/images/c3.png'), costumes: { default: require('../../assets/images/c3.png'), grass_skirt: require('../../assets/images/c3_grass.png'), goggles: require('../../assets/images/c3_gog.png') } },
+  { id: 4, name: 'Lionfish Cat', image: require('../../assets/images/c4.png'), costumes: { default: require('../../assets/images/c4.png'), grass_skirt: require('../../assets/images/c4_grass.png'), goggles: require('../../assets/images/c4_gog.png') } },
+  { id: 5, name: 'Goldfish Cat', image: require('../../assets/images/c5.png'), costumes: { default: require('../../assets/images/c5.png'), grass_skirt: require('../../assets/images/c5_grass.png'), goggles: require('../../assets/images/c5_gog.png') } },
+  { id: 6, name: 'Shrimp Cat', image: require('../../assets/images/c6.png'), costumes: { default: require('../../assets/images/c6.png'), grass_skirt: require('../../assets/images/c6_grass.png'), goggles: require('../../assets/images/c6_gog.png') } },
+  { id: 7, name: '"Normal" Cat', image: require('../../assets/images/c7.png'), costumes: { default: require('../../assets/images/c7.png'), grass_skirt: require('../../assets/images/c7_grass.png'), goggles: require('../../assets/images/c7_gog.png') } }
 ];
 
 const customizationItemsData = [
@@ -69,6 +73,7 @@ const Companions = () => {
   const [unlockedCompanions, setUnlockedCompanions] = useState([]);
   const [currentCustomizations, setCurrentCustomizations] = useState({});
   const [purchasedItems, setPurchasedItems] = useState([]);
+  const [newlyUnlockedCompanions, setNewlyUnlockedCompanions] = useState([]);
 
   const fetchCompanions = async (user) => {
     const userDoc = doc(FIRESTORE_DB, 'users', user.uid);
@@ -80,6 +85,7 @@ const Companions = () => {
       setCustomizationItems(data.customizationItems || []);
       setCurrentCustomizations(data.currentCustomizations || {});
       setPurchasedItems(data.purchasedItems || []);
+      setNewlyUnlockedCompanions(data.newlyUnlockedCompanions || []);
 
       // Update Firestore if this is the first time the user data is loaded
       if (!data.unlockedCompanions) {
@@ -106,9 +112,18 @@ const Companions = () => {
     };
   }, []);
 
-  const handleCompanionPress = (companion) => {
+  const handleCompanionPress = async (companion) => {
     if (unlockedCompanions.includes(companion.id)) {
       setSelectedCompanion(companion);
+      const updatedNewlyUnlockedCompanions = newlyUnlockedCompanions.filter(id => id !== companion.id);
+      setNewlyUnlockedCompanions(updatedNewlyUnlockedCompanions);
+
+      const auth = getAuth();
+      const user = auth.currentUser;
+      if (user) {
+        const userDoc = doc(FIRESTORE_DB, 'users', user.uid);
+        await updateDoc(userDoc, { newlyUnlockedCompanions: updatedNewlyUnlockedCompanions });
+      }
     } else {
       Alert.alert('Companion is locked', 'You have not unlocked this companion yet.');
     }
@@ -143,6 +158,9 @@ const Companions = () => {
                     <Image source={require('../../assets/images/question_mark.png')} style={styles.companionImage} />
                 )}
                 <Text style={styles.companionName}>{companion.name}</Text>
+                {newlyUnlockedCompanions.includes(companion.id) && (
+                  <Text style={styles.newReward}>New!</Text>
+                )}
             </TouchableOpacity>
         ))}
         </ScrollView>
@@ -224,6 +242,11 @@ const styles = StyleSheet.create({
     fontFamily: 'PlayfairDisplay',
     color: '#fff',
   },
+  newReward: {
+    fontSize: 14,
+    color: 'yellow', // Change to yellow
+    marginLeft: 5,
+  },
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -277,5 +300,3 @@ const styles = StyleSheet.create({
 });
 
 export default Companions;
-
-

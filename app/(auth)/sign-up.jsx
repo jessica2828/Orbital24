@@ -22,7 +22,7 @@ export default function SignUp() {
 
   const signUp = async () => {
     if (password !== confirmPassword) {
-      setMessage('Password do not match!');
+      setMessage('Passwords do not match!');
       setIsPopupVisible(true);
       return;
     }
@@ -36,6 +36,9 @@ export default function SignUp() {
       await setDoc(doc(db, 'users', user.uid), {
         name: name,
         email: email,
+        hasCompletedTutorial: false, // Set the tutorial flag to false for new users
+        pearlCurrency: 0,
+        shellCurrency: 0,
       });
 
       console.log(response);
@@ -54,7 +57,6 @@ export default function SignUp() {
   const closePopup = () => {
     setIsPopupVisible(false);
   };
-
 
   return (
     <ImageBackground source={require('../../assets/images/indoor.png')} style={styles.backgroundImage}>
@@ -155,6 +157,7 @@ const styles = StyleSheet.create({
     marginTop: 56, 
   },
 });
+
 
 
 // with tailwind css

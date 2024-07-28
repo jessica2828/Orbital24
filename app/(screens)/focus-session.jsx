@@ -3,14 +3,15 @@ import { StyleSheet, View, Text, Dimensions, StatusBar, TouchableOpacity, Platfo
 import { Picker } from "@react-native-picker/picker";
 import NotificationPopup from '@/components/NotificationPopup';
 import { FIRESTORE_DB, FIREBASE_AUTH } from '@/src/FirebaseConfig'; 
-import { doc, getDoc, setDoc, updateDoc, collection, addDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { Audio } from 'expo-av';
 import SoundPicker from '@/components/SoundPicker';
 import Currency from '../../components/currency';
 import BackButton from '@/components/BackButton';
 import { router } from 'expo-router';
-
+import LoadingScreenBefore from '../../components/LoadingScreenBefore';
+import LoadingScreenAfter from '../../components/LoadingScreenAfter';
 
 const screen = Dimensions.get("window");
 const formatNumber = number => `0${number}`.slice(-2);
@@ -22,7 +23,7 @@ const getRemaining = time => {
   return { minutes: formatNumber(minutes), seconds: formatNumber(seconds) };
 };
 
-const createArray = (start, end)=> {
+const createArray = (start, end) => {
   const arr = [];
   let i = start;
   while (i <= end) {
@@ -49,12 +50,14 @@ export default class FocusSessionScreen extends Component {
     showNotification: false,
     sound: null,
     soundPickerVisible: false,
-    selectedSound: { id: '1', name: 'Study', file: require('../../assets/music/lofi-study.mp3')},
+    selectedSound: { id: '1', name: 'Study', file: require('../../assets/music/lofi-study.mp3') },
     pearlCurrency: 0,
     shellCurrency: 0,
     initShell: 0,
     initPearl: 0,
     user: null,
+    loadingBefore: true,
+    loadingAfter: false,
   };
 
   interval = null;
@@ -65,23 +68,24 @@ export default class FocusSessionScreen extends Component {
         const userDoc = doc(FIRESTORE_DB, 'users', user.uid);
         const userSnapshot = await getDoc(userDoc);
         if (userSnapshot.exists()) {
-          this.setState({ 
+          this.setState({
             pearlCurrency: userSnapshot.data().pearlCurrency || 0,
             shellCurrency: userSnapshot.data().shellCurrency || 0,
           });
         } else {
-          await setDoc(userDoc, { 
+          await setDoc(userDoc, {
             pearlCurrency: 0,
             shellCurrency: 0,
           });
         }
-        this.setState({ 
+        this.setState({
           user,
-          initShell:userSnapshot.data().shellCurrency || 0,
+          initShell: userSnapshot.data().shellCurrency || 0,
           initPearl: userSnapshot.data().pearlCurrency || 0,
+          loadingBefore: false,
         });
       } else {
-        this.setState({ user: null, pearlCurrency: 0, shellCurrency: 0 });
+        this.setState({ user: null, pearlCurrency: 0, shellCurrency: 0, loadingBefore: false });
       }
     });
   }
@@ -89,7 +93,6 @@ export default class FocusSessionScreen extends Component {
   componentDidUpdate(prevProp, prevState) {
     if (this.state.remainingSeconds === 0 && prevState.remainingSeconds !== 0) {
       this.stop();
-      //this.incrementCurrency('pearlCurrency');
       this.incrementCurrency('shellCurrency');
     }
   }
@@ -109,7 +112,7 @@ export default class FocusSessionScreen extends Component {
   playSound = async () => {
     const { sound } = await Audio.Sound.createAsync(
       this.state.selectedSound.file,
-      { isLooping: true } 
+      { isLooping: true }
     );
     this.setState({ sound });
     await sound.playAsync();
@@ -124,19 +127,23 @@ export default class FocusSessionScreen extends Component {
   };
 
   start = async () => {
-    startTime = Date.now();
-    this.setState(state => ({
-      remainingSeconds: parseInt(state.selectedMinutes, 10) * 60,
-      isRunning: true,
-      startTime,
-    }));
-    this.playSound();
-    this.interval = setInterval(() => {
+    this.setState({ loadingBefore: true }); // Show loading screen before session starts
+    const startTime = Date.now();
+    setTimeout(() => {
       this.setState(state => ({
-        remainingSeconds: state.remainingSeconds - 1,
-        elapsedTime: Date.now() - startTime,
+        remainingSeconds: parseInt(state.selectedMinutes, 10) * 60,
+        isRunning: true,
+        startTime,
+        loadingBefore: false, // Hide loading screen once session starts
       }));
-    }, 1000);
+      this.playSound();
+      this.interval = setInterval(() => {
+        this.setState(state => ({
+          remainingSeconds: state.remainingSeconds - 1,
+          elapsedTime: Date.now() - startTime,
+        }));
+      }, 1000);
+    }, 2000); // Delay for the loading screen
   };
 
   pause = async () => {
@@ -160,40 +167,15 @@ export default class FocusSessionScreen extends Component {
     }
   };
 
-  // stop = async () => {
-  //   clearInterval(this.interval);
-  //   this.interval = null;
-  //   await this.recordTimeElapsed();
-  //   this.stopSound();
-  //   this.setState({
-  //     remainingSeconds: 0,
-  //     isRunning: false,
-  //     startTime: null,
-  //     elapsedTime: 0,
-  //   });
-  //   this.showNotification();
-  // }; 
-
   stop = async () => {
     clearInterval(this.interval);
     this.interval = null;
-    if (this.state.remainingSeconds === 0 && this.state.isRunning) {
-      await this.recordTimeElapsed();
-      //this.incrementCurrency('pearlCurrency');
-      this.incrementCurrency('shellCurrency');
-      this.showNotification();
-    } else {
-      this.stopSound();
-      this.setState({
-        isRunning: false,
-        startTime: null,
-        elapsedTime: 0,
-      });
-      this.showNotification();
-    }
-    
+    this.setState({ remainingSeconds: 0, loadingAfter: true });
+    const duration = (this.state.elapsedTime / 1000 / 60) + (parseInt(this.state.selectedMinutes, 10));
+    await this.recordTimeElapsed();
+    this.incrementCurrency('shellCurrency');
+    setTimeout(() => this.showNotification(duration), 2000); // Delay for the loading screen
   };
-
 
   recordTimeElapsed = async () => {
     const auth = getAuth();
@@ -203,7 +185,7 @@ export default class FocusSessionScreen extends Component {
       if (startTime) {
         const sessionData = {
           startTime: new Date(startTime),
-          elapsedTime: elapsedTime / 1000, 
+          elapsedTime: elapsedTime / 1000,
         };
         try {
           const userDoc = doc(FIRESTORE_DB, 'users', user.uid);
@@ -225,20 +207,13 @@ export default class FocusSessionScreen extends Component {
     } else {
       console.error('No user is signed in');
     }
-  };  
+  };
 
-  // showNotification = () => {
-  //   console.log("Session ended, focus time recorded.");
-  //   router.push('/end-focus-session');
-  // };
-
- 
-  showNotification = () => {
-    const { elapsedTime, initShell, pearlCurrency, shellCurrency } = this.state;
-    const duration = elapsedTime / 1000 / 60; 
+  showNotification = (duration) => {
+    const { initShell, shellCurrency } = this.state;
     const earnedShells = shellCurrency - initShell;
     this.stopSound();
-    router.push({ pathname: "/end-focus-session", params: { duration, earnedShells }});
+    router.push({ pathname: "/end-focus-session", params: { duration, earnedShells } });
   };
 
   toggleNotification = () => {
@@ -308,25 +283,23 @@ export default class FocusSessionScreen extends Component {
     }
   };
 
-  // incrementCurrency = async () => {
-  //   const { user, pearlCurrency, shellCurrency } = this.state;
-  //   const newShell = shellCurrency + CURRENCY_INCREMENT;
-  //   // shellCurrency + (CURRENCY_INCREMENT * 4);
-  //   this.setState({ shellCurrency : newShell });
-  
-  //   if (user) {
-  //     const userDoc = doc(FIRESTORE_DB, 'users', user.uid);
-  //     await updateDoc(userDoc, { shellCurrency : newShell });
-  //   }
-  // };
-
   render() {
     const { minutes, seconds } = getRemaining(this.state.remainingSeconds);
+    const { loadingBefore, loadingAfter, isRunning } = this.state;
+
+    if (loadingBefore) {
+      return <LoadingScreenBefore />;
+    }
+
+    if (loadingAfter) {
+      return <LoadingScreenAfter />;
+    }
+
     return (
       <ImageBackground source={require('../../assets/images/focussession.png')} style={styles.backgroundImage}>
         <View style={styles.overlay} />
         <View style={styles.container}>
-        <Currency pearl={this.state.pearlCurrency} shell={this.state.shellCurrency} />
+          <Currency pearl={this.state.pearlCurrency} shell={this.state.shellCurrency} />
           <StatusBar barStyle="light-content" />
           {this.state.isRunning ? (
             <Text style={styles.timerText}>{`${minutes}:${seconds}`}</Text>
@@ -369,7 +342,6 @@ export default class FocusSessionScreen extends Component {
   }
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -398,7 +370,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   buttonStop: {
-    borderColor: "#99fff",
+    borderColor: "white",
   },
   buttonText: {
     fontSize: 45,
@@ -406,7 +378,7 @@ const styles = StyleSheet.create({
     fontFamily: 'PlayfairDisplay',
   },
   buttonTextStop: {
-    color: "#99fff",
+    color: "white",
   },
   timerText: {
     color: "white",
