@@ -21,6 +21,9 @@ export default function Home({ navigation }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [invitationDetails, setInvitationDetails] = useState(null);
 
+  const auth = getAuth();
+  const currentUser = auth.currentUser;
+
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -267,37 +270,60 @@ export default function Home({ navigation }) {
   // };
   
   const handleDeclineInvitation = async () => {
-    const currentUser = getAuth().currentUser;
-    if (!currentUser) {
-      console.error('No current user found.');
-      return;
-    }
+    try {
+      const auth = getAuth();
+      const currentUser = auth.currentUser;
   
-    const currentUserId = currentUser.uid;
-    const userDocRef = doc(FIRESTORE_DB, 'users', currentUserId);
-    const userSnapshot = await getDoc(userDocRef);
+      const userRef = doc(FIRESTORE_DB, 'users', currentUser.uid);
+      const userDoc = await getDoc(userRef);
   
-    if (userSnapshot.exists()) {
-      const invitations = userSnapshot.data().invitations || [];
-      if (invitations.length > 0) {
-        const latestInvitation = invitations[invitations.length - 1];
+      const userData = userDoc.data();
+      const sentInvitations = userData.sentInvitations;
   
-        const updatedInvitations = invitations.filter(inv => 
-          !(inv.fromId === latestInvitation.fromId && inv.roomCode === latestInvitation.roomCode)
-        );
-  
-        await updateDoc(userDocRef, {
-          invitations: updatedInvitations
-        });
-  
-        Alert.alert('Invitation declined successfully.');
+      if (!sentInvitations || sentInvitations.length === 0) {
+        Alert.alert('Error', 'No sent invitations!');
+        return;
       }
-    }
   
-    setIsModalVisible(false);
+      // Remove the latest invitation
+      const latestInvitation = sentInvitations[sentInvitations.length - 1];
+      const updatedSentInvitations = sentInvitations.filter(inv => inv !== latestInvitation);
+  
+      // Update the sender's document
+      await updateDoc(userRef, {
+        sentInvitations: updatedSentInvitations,
+        goHome: true,
+      });
+  
+      // Update the receiver's document
+      // const receiverRef = doc(FIRESTORE_DB, 'users', latestInvitation.to);
+      // await updateDoc(receiverRef, {
+      //   receivedInvitations: arrayRemove(latestInvitation),
+      //   goHome: true,
+      // });
+  
+      setIsModalVisible(false);
+      router.push('/home');
+    } catch (error) {
+      Alert.alert('Error', 'Failed to cancel quest.');
+      console.error('Error in handleCancelQuest:', error);
+    }
   };
   
+  // useEffect(() => {
+  //   if (currentUser) {
+  //     const userRef = doc(FIRESTORE_DB, 'users', currentUser.uid);
 
+  //     const unsubscribe = onSnapshot(userRef, (doc) => {
+  //       const data = doc.data();
+  //       if (data && data.goHome) {
+  //         router.push({ pathname: '/home'});
+  //       }
+  //     });
+
+  //     return () => unsubscribe();
+  //   }
+  // }, [currentUser]);
 
 
   return (
